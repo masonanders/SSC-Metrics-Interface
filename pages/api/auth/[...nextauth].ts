@@ -1,13 +1,27 @@
 import NextAuth from "next-auth"
 import DiscordProvider from "next-auth/providers/discord"
 
+const secret = process.env.SECRET
+const clientId = process.env.DISCORD_CLIENT_ID
+const clientSecret = process.env.DISCORD_CLIENT_SECRET
+
 export default NextAuth({
+  secret,
   // Configure one or more authentication providers
   providers: [
     DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      authorization: "https://discord.com/api/oauth2/authorize?client_id=959890701640949790&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20guilds.members.read"
+      clientId,
+      clientSecret,
+      authorization: { params: { scope: 'identify guilds.members.read' } }
     }),
   ],
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+      }
+      return token;
+    },
+  },
 })
