@@ -1,10 +1,11 @@
 import Head from 'next/head';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { getSession, signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { GetServerSidePropsContext } from 'next';
+import { authOptions } from './api/auth/[...nextauth]';
 
-export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context, authOptions);
 
   if (session) {
     return {
@@ -16,7 +17,7 @@ export const getServerSideProps = async (context) => {
   }
 
   return { props: {} };
-};
+}
 
 export default function Home() {
   return (
@@ -25,14 +26,10 @@ export default function Home() {
         <title>Next.js Login!</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main>
-        <Header title="Please, login!" />
         <p className="description">Get started by logging in</p>
         <button onClick={() => signIn('discord')}>Log in</button>
       </main>
-
-      <Footer />
     </div>
   );
 }

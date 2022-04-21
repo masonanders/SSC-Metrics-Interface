@@ -1,42 +1,18 @@
-import Head from 'next/head';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { getSession, signOut } from 'next-auth/react';
+import { GetServerSidePropsContext } from 'next';
+import { getServerSession } from 'next-auth';
+import { validateSession } from '../util/validateSession';
+import { authOptions } from './api/auth/[...nextauth]';
 
-export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/signin',
-        permanent: false,
-      },
-    };
-  }
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context, authOptions);
+  const { redirect } = validateSession(session);
+  if (redirect) return { redirect };
 
   return {
     props: { session },
   };
-};
+}
 
 export default function Home() {
-  return (
-    <div className="container">
-      <Head>
-        <title>Next.js Starter!</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <Header title="Welcome to my app!" />
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-        <button onClick={() => signOut()}>Sign out</button>
-      </main>
-
-      <Footer />
-    </div>
-  );
+  return <>Main content</>;
 }
