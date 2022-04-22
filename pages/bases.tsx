@@ -12,6 +12,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return { props: { session } };
 }
 
-export default function Home() {
+export default function Bases() {
   return <Layout>Main content</Layout>;
 }

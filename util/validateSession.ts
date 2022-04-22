@@ -9,7 +9,7 @@ type ValidationResults = {
 
 
 export function validateSession(session: Session): ValidationResults {
-  if (!session || session.forceSignout || session.error) {
+  if (!session) {
     return {
       redirect: {
         destination: '/signin',
