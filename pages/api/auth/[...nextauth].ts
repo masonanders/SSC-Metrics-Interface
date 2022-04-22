@@ -48,8 +48,9 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      if (session.user) delete session.user.email
       if (token.error || !token.member || !isMemberWithinScope(token.member, LOGIN_SCOPE)) {
-        return { ...session, error: token.error, forceSignout: true }
+        return { ...session, forceSignout: true }
       }
       session.member = token.member
       return session
