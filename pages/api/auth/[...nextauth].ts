@@ -1,14 +1,14 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
-import DiscordProvider from "next-auth/providers/discord"
-import { LOGIN_SCOPE } from "../../../util/constants"
-import { HTTPNotFoundError } from "../../../util/customErrors"
-import fetchDiscordMember from "../../../util/fetchDiscordMember"
-import isExpired from "../../../util/isExpired"
-import isMemberWithinScope from "../../../util/isMemberWithinScope"
+import NextAuth, { NextAuthOptions } from 'next-auth';
+import DiscordProvider from 'next-auth/providers/discord';
+import { LOGIN_SCOPE } from '../../../util/constants';
+import { HTTPNotFoundError } from '../../../util/customErrors';
+import fetchDiscordMember from '../../../util/fetchDiscordMember';
+import isExpired from '../../../util/isExpired';
+import isMemberWithinScope from '../../../util/isMemberWithinScope';
 
-const secret = process.env.SECRET
-const clientId = process.env.DISCORD_CLIENT_ID
-const clientSecret = process.env.DISCORD_CLIENT_SECRET
+const secret = process.env.SECRET;
+const clientId = process.env.DISCORD_CLIENT_ID;
+const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 
 export const authOptions: NextAuthOptions = {
   secret,
@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId,
       clientSecret,
-      authorization: { params: { scope: 'identify guilds.members.read' } }
+      authorization: { params: { scope: 'identify guilds.members.read' } },
     }),
   ],
   callbacks: {
@@ -27,52 +27,59 @@ export const authOptions: NextAuthOptions = {
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           member: user.member,
-          memberExp: Math.floor(Date.now() / 1000) + (60 * 5),
-        }
+          memberExp: Math.floor(Date.now() / 1000) + 60 * 5,
+        };
       }
-      if (!token.member || typeof token.memberExp !== 'number' || isExpired(token.memberExp)) {
+      if (
+        !token.member ||
+        typeof token.memberExp !== 'number' ||
+        isExpired(token.memberExp)
+      ) {
         try {
-          const accessToken = account.access_token
-          const member = await fetchDiscordMember(accessToken)
+          const accessToken = account.access_token;
+          const member = await fetchDiscordMember(accessToken);
           return {
             ...token,
             member,
-            memberExp: Math.floor(Date.now() / 1000) + (60 * 5)
-          }
+            memberExp: Math.floor(Date.now() / 1000) + 60 * 5,
+          };
         } catch (error) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { member: _member, memberExp: _memberExp, ...newToken } = token
-          return { ...newToken, error }
+          const { member: _member, memberExp: _memberExp, ...newToken } = token;
+          return { ...newToken, error };
         }
       }
       return token;
     },
     async session({ session, token }) {
-      if (session.user) delete session.user.email
-      if (token.error || !token.member || !isMemberWithinScope(token.member, LOGIN_SCOPE)) {
-        return { ...session, forceSignout: true }
+      if (session.user) delete session.user.email;
+      if (
+        token.error ||
+        !token.member ||
+        !isMemberWithinScope(token.member, LOGIN_SCOPE)
+      ) {
+        return { ...session, forceSignout: true };
       }
-      session.member = token.member
-      return session
+      session.member = token.member;
+      return session;
     },
     async signIn({ user, account }) {
       try {
-        const accessToken = account.access_token
-        const member = await fetchDiscordMember(accessToken)
+        const accessToken = account.access_token;
+        const member = await fetchDiscordMember(accessToken);
         if (!isMemberWithinScope(member, LOGIN_SCOPE)) {
-          throw new HTTPNotFoundError('Missing login scope')
+          throw new HTTPNotFoundError('Missing login scope');
         }
-        user.member = member
-        return true
+        user.member = member;
+        return true;
       } catch (error) {
         if (error instanceof HTTPNotFoundError) {
-          return '/403'
+          return '/403';
         }
       }
-      return '/500'
-    }
+      return '/500';
+    },
   },
-}
+};
 
-
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);

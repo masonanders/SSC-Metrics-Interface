@@ -2,11 +2,10 @@ import { Session } from 'next-auth';
 
 type ValidationResults = {
   redirect?: {
-    destination: string,
-    permanent: boolean,
-  }
-}
-
+    destination: string;
+    permanent: boolean;
+  };
+};
 
 export function validateSession(session: Session): ValidationResults {
   if (!session) {
@@ -18,5 +17,5 @@ export function validateSession(session: Session): ValidationResults {
     };
   }
 
-  return {}
+  return {};
 }
