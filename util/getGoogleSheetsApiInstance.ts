@@ -1,7 +1,7 @@
 import { google } from 'googleapis';
 
 const client_email = process.env.GOOGLE_CLIENT_EMAIL;
-const private_key = process.env.GOOGLE_PRIVATE_KEY;
+const private_key = process.env.GOOGLE_PRIVATE_KEY.split('\\n').join('\n');
 
 export default function getGoogleSheetsApiInstance() {
   const auth = new google.auth.GoogleAuth({
