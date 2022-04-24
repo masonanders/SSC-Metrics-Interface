@@ -2,7 +2,11 @@ import { sheets_v4 } from 'googleapis';
 import getUniqueId from '../getUniqueId';
 import batchUpdateSheetData from '../server/googleSheets/batchUpdateSheetData';
 import fetchSheetData from '../server/googleSheets/fetchSheetData';
-import { Sheet, SheetBool } from '../server/googleSheets/types';
+import {
+  Sheet,
+  SheetBool,
+  ValueInputOption,
+} from '../server/googleSheets/types';
 import {
   DeliveryRequest,
   GatheringRequest,
@@ -246,10 +250,12 @@ export async function getRequestData(type: RequestType, toColumn: string) {
 
 export async function updateRequestData(
   type: RequestType,
-  data: Parameters<typeof batchUpdateSheetData>[0]['data']
+  data: Parameters<typeof batchUpdateSheetData>[0]['data'],
+  valueInput?: ValueInputOption
 ) {
   return await batchUpdateSheetData({
     sheet: typeToSheetMap[type],
     data,
+    valueInputOption: valueInput,
   });
 }

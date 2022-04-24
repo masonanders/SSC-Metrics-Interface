@@ -1,18 +1,20 @@
 import getGoogleSheetsApiInstance from '../../getGoogleSheetsApiInstance';
-import { RangeCoordinate, Sheet, ValueInputOption } from './types';
+import { RangeCoordinate, Sheet, SheetBool, ValueInputOption } from './types';
 
 const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
 export default async function batchUpdateSheetData({
   sheet,
   data: updateData,
+  valueInputOption = ValueInputOption.USER_ENTERED,
 }: {
   sheet: Sheet;
   data: {
-    values: (string | number)[][];
+    values: (string | number | SheetBool)[][];
     from: RangeCoordinate;
     to: RangeCoordinate;
   }[];
+  valueInputOption?: ValueInputOption;
 }) {
   try {
     const sheets = getGoogleSheetsApiInstance();
@@ -20,7 +22,7 @@ export default async function batchUpdateSheetData({
       {
         spreadsheetId,
         requestBody: {
-          valueInputOption: ValueInputOption.RAW,
+          valueInputOption,
           data: updateData.map(({ values, from, to }) => ({
             range: `'${sheet}'!${from.column + from.row}:${to.column + to.row}`,
             values,
