@@ -36,7 +36,8 @@ export const authOptions: NextAuthOptions = {
         isExpired(token.memberExp)
       ) {
         try {
-          const accessToken = account.access_token;
+          const accessToken =
+            account?.access_token ?? (token.accessToken as string);
           const member = await fetchDiscordMember(accessToken);
           return {
             ...token,
