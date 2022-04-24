@@ -41,11 +41,19 @@ export default function Distributing() {
               <Row head row={rows[0]} />
             </TableHead>
             <TableBody>
-              {rows.slice(1).map((row) => (
-                <TableRow key={row.id}>
-                  <Row row={row} />
-                </TableRow>
-              ))}
+              {rows.slice(1).length ? (
+                rows.slice(1).map((row) => (
+                  <TableRow key={row.id}>
+                    <Row row={row} />
+                  </TableRow>
+                ))
+              ) : (
+                <TableCell colSpan={8}>
+                  <Typography sx={{ my: 4 }} textAlign="center" variant="h4">
+                    No requests
+                  </Typography>
+                </TableCell>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

@@ -43,11 +43,19 @@ export default function Manufacturing() {
               <Row head row={rows[0]} />
             </TableHead>
             <TableBody>
-              {rows.slice(1).map((row) => (
-                <TableRow key={row.id}>
-                  <Row row={row} />
-                </TableRow>
-              ))}
+              {rows.slice(1).length ? (
+                rows.slice(1).map((row) => (
+                  <TableRow key={row.id}>
+                    <Row row={row} />
+                  </TableRow>
+                ))
+              ) : (
+                <TableCell colSpan={7}>
+                  <Typography textAlign="center" sx={{ py: 4 }} variant="h4">
+                    No requests
+                  </Typography>
+                </TableCell>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

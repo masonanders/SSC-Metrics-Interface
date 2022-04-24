@@ -22,8 +22,8 @@ export default function Home() {
       <Typography sx={{ mt: 16 }} textAlign="center" variant="h2">
         Coming soon!
       </Typography>
-      <Typography sx={{ mt: 8 }} textAlign="center" variant="h4">
-        (check out Manufacturing and Distributing)
+      <Typography sx={{ mt: 8 }} textAlign="center" variant="h5">
+        (check out Manufacturing and Distributing in the meantime)
       </Typography>
     </Layout>
   );
