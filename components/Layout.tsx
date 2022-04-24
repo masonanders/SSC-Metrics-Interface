@@ -68,11 +68,7 @@ function AppBar() {
 }
 
 function Drawer() {
-  const {
-    data: {
-      user: { name: userName },
-    },
-  } = useSession();
+  const session = useSession();
 
   return (
     <MuiDrawer
@@ -93,8 +89,7 @@ function Drawer() {
         gridTemplateRows="min-content auto auto"
       >
         <Typography fontSize={16} fontWeight={600}>
-          {/* TODO user user nickname */}
-          {userName}
+          {session.data?.member?.nick}
         </Typography>
         <List>
           <ListItem>Requests</ListItem>

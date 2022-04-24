@@ -17,10 +17,10 @@ export default function Refining() {
   return (
     <Layout>
       <Typography sx={{ mt: 8 }} textAlign="center" variant="h1">
-        Coming soon!
+        Refining
       </Typography>
       <Typography sx={{ mt: 16 }} textAlign="center" variant="h2">
-        Refining
+        Coming soon!
       </Typography>
     </Layout>
   );
