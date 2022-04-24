@@ -11,6 +11,7 @@ export default function usePolling<RowType>(
       const response = await fetch(requestUrl);
       setData(await response.json());
     }
+    getData();
 
     let pollInstance = poll();
     function poll() {
