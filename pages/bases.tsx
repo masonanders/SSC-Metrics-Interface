@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import Layout from '../components/Layout';
@@ -13,5 +14,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Bases() {
-  return <Layout>Main content</Layout>;
+  return (
+    <Layout>
+      <Typography sx={{ mt: 8 }} textAlign="center" variant="h1">
+        Bases
+      </Typography>
+      <Typography sx={{ mt: 16 }} textAlign="center" variant="h2">
+        Coming soon!
+      </Typography>
+    </Layout>
+  );
 }
