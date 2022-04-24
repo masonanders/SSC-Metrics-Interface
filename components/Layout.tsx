@@ -98,28 +98,26 @@ function Drawer() {
         </Typography>
         <List>
           <ListItem>Requests</ListItem>
-          <List>
-            <ListItemButton>
-              <Link href="/requests/gathering">Gathering</Link>
-            </ListItemButton>
-            <ListItemButton>
-              <Link href="/requests/manufacturing">Manufacturing</Link>
-            </ListItemButton>
-            <ListItemButton>
-              <Link href="/requests/distributing">Distributing</Link>
-            </ListItemButton>
+          <List sx={{ pl: 2 }}>
+            <NavLink href="/requests/refining">Refining</NavLink>
+            <NavLink href="/requests/manufacturing">Manufacturing</NavLink>
+            <NavLink href="/requests/distributing">Distributing</NavLink>
           </List>
-          <ListItemButton>
-            <Link href="/stockpiles">Stockpiles</Link>
-          </ListItemButton>
-          <ListItemButton>
-            <Link href="/bases">Bases</Link>
-          </ListItemButton>
+          <NavLink href="/stockpiles">Stockpiles</NavLink>
+          <NavLink href="/bases">Bases</NavLink>
         </List>
         <Button sx={{ mt: 'auto' }} onClick={() => signOut()}>
           Log out
         </Button>
       </Box>
     </MuiDrawer>
+  );
+}
+
+function NavLink({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <Link href={href}>
+      <ListItemButton>{children}</ListItemButton>
+    </Link>
   );
 }
