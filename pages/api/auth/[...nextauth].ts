@@ -39,12 +39,14 @@ export const authOptions: NextAuthOptions = {
           const accessToken =
             account?.access_token ?? (token.accessToken as string);
           const member = await fetchDiscordMember(accessToken);
+          console.log('jwt:refetch', { user, member });
           return {
             ...token,
             member,
             memberExp: Math.floor(Date.now() / 1000) + 60 * 5,
           };
         } catch (error) {
+          console.log('jwt:catch', error);
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { member: _member, memberExp: _memberExp, ...newToken } = token;
           return { ...newToken, error };
@@ -68,16 +70,18 @@ export const authOptions: NextAuthOptions = {
       try {
         const accessToken = account.access_token;
         const member = await fetchDiscordMember(accessToken);
+        console.log('signIn:fetch', { user, member });
         if (!isMemberWithinScope(member, LOGIN_SCOPE)) {
           throw new HTTPNotFoundError('Missing login scope');
         }
         user.member = member;
         return true;
       } catch (error) {
-        console.log(error);
         if (error instanceof HTTPNotFoundError) {
+          console.log('jwt:catch:404', { user, error });
           return '/403';
         }
+        console.log('jwt:catch', { error });
       }
       return '/500';
     },
