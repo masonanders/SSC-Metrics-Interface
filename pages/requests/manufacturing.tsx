@@ -80,7 +80,9 @@ function Row({ row, head }: { row: DeliveryRequest; head?: boolean }) {
       <TableCell align="center">
         {row.acceptedBy || (
           <Button
-            onClick={() => fetch(`/api/requests/distributing/accept/${row.id}`)}
+            onClick={() =>
+              fetch(`/api/requests/manufacturing/accept/${row.id}`)
+            }
           >
             Accept
           </Button>
@@ -92,7 +94,7 @@ function Row({ row, head }: { row: DeliveryRequest; head?: boolean }) {
           (row.acceptedBy === session.data.member.nick && (
             <Button
               onClick={() =>
-                fetch(`/api/requests/distributing/complete/${row.id}`)
+                fetch(`/api/requests/manufacturing/complete/${row.id}`)
               }
             >
               Complete
