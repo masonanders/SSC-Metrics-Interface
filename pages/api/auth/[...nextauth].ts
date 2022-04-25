@@ -4,7 +4,7 @@ import { LOGIN_SCOPE } from '../../../util/constants';
 import { HTTPNotFoundError } from '../../../util/customErrors';
 import fetchDiscordMember from '../../../util/fetchDiscordMember';
 import isExpired from '../../../util/isExpired';
-import isMemberWithinScope from '../../../util/isMemberWithinScope';
+import isMemberWithinScope from '../../../util/server/isMemberWithinScope';
 
 const secret = process.env.SECRET;
 const clientId = process.env.DISCORD_CLIENT_ID;

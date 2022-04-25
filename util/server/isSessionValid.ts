@@ -1,6 +1,6 @@
 import { Session } from 'next-auth';
 import { LOGIN_SCOPE } from '../constants';
-import isMemberWithinScope from '../isMemberWithinScope';
+import isMemberWithinScope from './isMemberWithinScope';
 
 export default function isSessionValid(session: Session): boolean {
   return (
