@@ -13,28 +13,22 @@ import { validateSession } from '../util/validateSession';
 import { authOptions } from './api/auth/[...nextauth]';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  console.log(
-    DIRECTOR_SCOPE,
-    ADMIN_SCOPE,
-    PRIVATE_SCOPE,
-    PUBLIC_SCOPE,
-    LOGIN_SCOPE
-  );
+  const scopes = {
+    DIRECTOR_SCOPE: [...DIRECTOR_SCOPE],
+    ADMIN_SCOPE: [...ADMIN_SCOPE],
+    PRIVATE_SCOPE: [...PRIVATE_SCOPE],
+    PUBLIC_SCOPE: [...PUBLIC_SCOPE],
+    LOGIN_SCOPE: [...LOGIN_SCOPE],
+  };
   const session = await getServerSession(context, authOptions);
   const { redirect } = validateSession(session);
   if (redirect) return { redirect };
 
-  return { props: { session } };
+  return { props: { session, scopes } };
 }
 
-export default function Home() {
-  console.log(
-    DIRECTOR_SCOPE,
-    ADMIN_SCOPE,
-    PRIVATE_SCOPE,
-    PUBLIC_SCOPE,
-    LOGIN_SCOPE
-  );
+export default function Home({ scopes }) {
+  console.log('SCOPES', scopes);
 
   return (
     <Layout>
