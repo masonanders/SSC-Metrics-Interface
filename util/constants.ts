@@ -10,14 +10,21 @@ export const FWGMemberRole = {
   COMMANDANT: process.env.FWG_ROLE_ID_COMMANDANT as FWGMemberRoleId,
   COMMISSAR: process.env.FWG_ROLE_ID_COMMISSAR as FWGMemberRoleId,
   COMRADE: process.env.FWG_ROLE_ID_COMRADE as FWGMemberRoleId,
+  ENGINEER: process.env.FWG_ROLE_ID_ENGINEER as FWGMemberRoleId,
+  ENGINEER_CHIEF: process.env.FWG_ROLE_ID_ENGINEER_CHIEF as FWGMemberRoleId,
   GARRISON: process.env.FWG_ROLE_ID_GARRISON as FWGMemberRoleId,
   GUARDSMAN: process.env.FWG_ROLE_ID_GUARDSMAN as FWGMemberRoleId,
   LEAD: process.env.FWG_ROLE_ID_LEAD as FWGMemberRoleId,
   LOGISTICS: process.env.FWG_ROLE_ID_LOGISTICS as FWGMemberRoleId,
   LOGISTICS_DIRECTOR: process.env
     .FWG_ROLE_ID_LOGISTICS_DIRECTOR as FWGMemberRoleId,
+  PIRATE: process.env.FWG_ROLE_ID_PIRATE as FWGMemberRoleId,
+  PIRATE_CAPTAIN: process.env.FWG_ROLE_ID_PIRATE_CAPTAIN as FWGMemberRoleId,
   RECRUIT: process.env.FWG_ROLE_ID_RECRUIT as FWGMemberRoleId,
   RESERVE: process.env.FWG_ROLE_ID_RESERVE as FWGMemberRoleId,
+  TEMPEST_COMMODORE: process.env
+    .FWG_ROLE_ID_TEMPEST_COMMODORE as FWGMemberRoleId,
+  TEMPEST_MARINE: process.env.FWG_ROLE_ID_TEMPEST_MARINE as FWGMemberRoleId,
   WARDEN: process.env.FWG_ROLE_ID_WARDEN as FWGMemberRoleId,
 } as const;
 
