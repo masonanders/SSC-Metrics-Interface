@@ -74,6 +74,7 @@ export const authOptions: NextAuthOptions = {
         user.member = member;
         return true;
       } catch (error) {
+        console.log(error);
         if (error instanceof HTTPNotFoundError) {
           return '/403';
         }
