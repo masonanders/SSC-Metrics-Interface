@@ -19,22 +19,23 @@ export interface RefiningRequest {
   item: Item;
   quantity: number;
   category: Category;
-  requester: string;
-  deliveryLocation: string;
-  deliveryRegion: string;
-  deliveryZone: string;
-  priority: Priority;
+  refineryZone: string;
+  region: string;
+  coordinates: string;
   acceptedBy: string;
   completed: boolean;
   requiredSalvage: number;
   requiredComponents: number;
-  requiredCrudeOil: number;
   requiredSulfur: number;
+  requiredCrudeOil: number;
+  requiredAluminium: number;
+  requiredIron: number;
+  requiredCopper: number;
   craftTime: string;
   confirmed: boolean;
+  timeCompleted: number;
   timeRequested: number;
   timeAccepted: number;
-  timeCompleted: number;
   id: string;
 }
 
