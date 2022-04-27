@@ -72,7 +72,7 @@ function Row({ row, head }: { row: DeliveryRequest; head?: boolean }) {
   const session = useSession();
   return (
     <>
-      <TableCell>{head ? 'Item Name' : row.item}</TableCell>
+      <TableCell>{row.item}</TableCell>
       <TableCell align="center">{row.quantity || '#'}</TableCell>
       <TableCell>{row.category}</TableCell>
       <TableCell>{row.deliveryLocation}</TableCell>
