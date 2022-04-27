@@ -1,5 +1,5 @@
 export enum RequestType {
-  GATHERING = 'gathering',
+  REFINING = 'refining',
   MANUFACTURING = 'manufacturing',
   DISTRIBUTING = 'distributing',
 }
@@ -13,7 +13,7 @@ export enum Priority {
   CRITICAL = '1. MISSION CRITICAL',
 }
 
-export interface GatheringRequest {
+export interface RefiningRequest {
   rowNum: number;
 
   item: Item;
@@ -86,4 +86,4 @@ export interface DeliveryRequest {
   id: string;
 }
 
-export type Request = GatheringRequest | ManufacturingRequest | DeliveryRequest;
+export type Request = RefiningRequest | ManufacturingRequest | DeliveryRequest;
