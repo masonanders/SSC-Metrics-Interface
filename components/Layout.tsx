@@ -49,17 +49,15 @@ function AppBar() {
           minWidth={40}
           borderRadius="50%"
           sx={{
-            ...(userImage
-              ? {
-                  backgroundSize: 'contain',
-                  backgroundImage: `url(${userImage})`,
-                }
-              : {
-                  borderWidth: 1,
-                  borderStyle: 'solid',
-                  borderColor: 'white',
-                  backgroundColor: 'secondary',
-                }),
+            borderWidth: 2,
+            borderStyle: 'solid',
+            borderColor: '#99A1A9',
+            backgroundSize: 'contain',
+            backgroundImage: `url(${
+              userImage
+                ? userImage
+                : 'https://cdn.discordapp.com/attachments/892325227210629130/968696193729302548/FWG_new.png'
+            })`,
           }}
         />
       </Toolbar>
