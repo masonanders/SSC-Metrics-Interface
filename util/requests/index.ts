@@ -9,7 +9,7 @@ import {
 } from '../server/googleSheets/types';
 import {
   DeliveryRequest,
-  GatheringRequest,
+  RefiningRequest,
   ManufacturingRequest,
   Priority,
   RequestType,
@@ -18,19 +18,19 @@ import {
 
 // Sheet address maps
 const typeToSheetMap = {
-  [RequestType.GATHERING]: Sheet.GATHERING_REQUESTS,
+  [RequestType.REFINING]: Sheet.REFINING_REQUESTS,
   [RequestType.MANUFACTURING]: Sheet.MANUFACTURING_REQUESTS,
   [RequestType.DISTRIBUTING]: Sheet.DELIVERY_REQUESTS,
 } as const;
 
 export const requestTypeSheetEndColumnMap = {
-  [RequestType.GATHERING]: 'T',
+  [RequestType.REFINING]: 'T',
   [RequestType.MANUFACTURING]: 'T',
   [RequestType.DISTRIBUTING]: 'R',
 } as const;
 
 export const requestTypeSheetRequestIdCellMap = {
-  [RequestType.GATHERING]: 'T',
+  [RequestType.REFINING]: 'T',
   [RequestType.MANUFACTURING]: 'T',
   [RequestType.DISTRIBUTING]: 'R',
 } as const;
@@ -41,7 +41,7 @@ export function validateRequestTypeParam(
   return (
     typeof type === 'string' &&
     [
-      RequestType.GATHERING,
+      RequestType.REFINING,
       RequestType.MANUFACTURING,
       RequestType.DISTRIBUTING,
     ].includes(type as RequestType)
@@ -49,30 +49,31 @@ export function validateRequestTypeParam(
 }
 
 // Row processing helpers
-export function processGatheringRequestsRow(
+export function processRefiningRequestsRow(
   row: string[],
   rowNum: number
-): GatheringRequest {
+): RefiningRequest {
   const [
     item,
     quantity,
     category,
-    requester,
-    deliveryLocation,
-    deliveryRegion,
-    deliveryZone,
-    priority,
+    refineryZone,
+    region,
+    coordinates,
     acceptedBy,
     completed,
     requiredSalvage,
     requiredComponents,
-    requiredCrudeOil,
     requiredSulfur,
+    requiredCrudeOil,
+    requiredAluminium,
+    requiredIron,
+    requiredCopper,
     craftTime,
     confirmed,
+    timeCompleted,
     timeRequested,
     timeAccepted,
-    timeCompleted,
     uniqueId,
   ] = row;
   return {
@@ -80,22 +81,23 @@ export function processGatheringRequestsRow(
     item,
     quantity: parseInt(quantity),
     category,
-    requester,
-    deliveryLocation,
-    deliveryRegion,
-    deliveryZone,
-    priority: priority as Priority,
+    refineryZone,
+    region,
+    coordinates,
     acceptedBy,
     completed: completed && completed === SheetBool.TRUE,
     requiredSalvage: parseInt(requiredSalvage),
     requiredComponents: parseInt(requiredComponents),
-    requiredCrudeOil: parseInt(requiredCrudeOil),
     requiredSulfur: parseInt(requiredSulfur),
+    requiredCrudeOil: parseInt(requiredCrudeOil),
+    requiredAluminium: parseInt(requiredAluminium),
+    requiredIron: parseInt(requiredIron),
+    requiredCopper: parseInt(requiredCopper),
     craftTime,
     confirmed: confirmed && confirmed === SheetBool.TRUE,
+    timeCompleted: new Date(timeCompleted).getTime(),
     timeRequested: new Date(timeRequested).getTime(),
     timeAccepted: new Date(timeAccepted).getTime(),
-    timeCompleted: new Date(timeCompleted).getTime(),
     id: uniqueId,
   };
 }
@@ -200,8 +202,8 @@ export function processDelivereyRequestsRow(
 
 function getProcessRequestRowHelper(type: RequestType) {
   switch (type) {
-    case RequestType.GATHERING:
-      return processGatheringRequestsRow;
+    case RequestType.REFINING:
+      return processRefiningRequestsRow;
     case RequestType.MANUFACTURING:
       return processManufacturingRequestsRow;
     case RequestType.DISTRIBUTING:

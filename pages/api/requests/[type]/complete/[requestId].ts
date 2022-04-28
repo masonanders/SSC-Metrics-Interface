@@ -16,7 +16,7 @@ import isSessionValid from '../../../../../util/server/isSessionValid';
 import { authOptions } from '../../../auth/[...nextauth]';
 
 const requestTypeSheetAcceptedByColumnMap = {
-  [RequestType.GATHERING]: 'J',
+  [RequestType.REFINING]: 'J',
   [RequestType.MANUFACTURING]: 'J',
   [RequestType.DISTRIBUTING]: 'M',
 };

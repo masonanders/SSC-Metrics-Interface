@@ -1,5 +1,5 @@
 export enum RequestType {
-  GATHERING = 'gathering',
+  REFINING = 'refining',
   MANUFACTURING = 'manufacturing',
   DISTRIBUTING = 'distributing',
 }
@@ -13,28 +13,29 @@ export enum Priority {
   CRITICAL = '1. MISSION CRITICAL',
 }
 
-export interface GatheringRequest {
+export interface RefiningRequest {
   rowNum: number;
 
   item: Item;
   quantity: number;
   category: Category;
-  requester: string;
-  deliveryLocation: string;
-  deliveryRegion: string;
-  deliveryZone: string;
-  priority: Priority;
+  refineryZone: string;
+  region: string;
+  coordinates: string;
   acceptedBy: string;
   completed: boolean;
   requiredSalvage: number;
   requiredComponents: number;
-  requiredCrudeOil: number;
   requiredSulfur: number;
+  requiredCrudeOil: number;
+  requiredAluminium: number;
+  requiredIron: number;
+  requiredCopper: number;
   craftTime: string;
   confirmed: boolean;
+  timeCompleted: number;
   timeRequested: number;
   timeAccepted: number;
-  timeCompleted: number;
   id: string;
 }
 
@@ -86,4 +87,4 @@ export interface DeliveryRequest {
   id: string;
 }
 
-export type Request = GatheringRequest | ManufacturingRequest | DeliveryRequest;
+export type Request = RefiningRequest | ManufacturingRequest | DeliveryRequest;

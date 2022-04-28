@@ -7,7 +7,7 @@ export type RangeCoordinate = { column: string; row: string | number };
 
 export enum Sheet {
   MANUFACTURING_REQUESTS = 'Manufacturing Requests',
-  GATHERING_REQUESTS = 'Gathering Requests',
+  REFINING_REQUESTS = 'Refining Requests',
   DELIVERY_REQUESTS = 'Delivery Requests',
 }
 
