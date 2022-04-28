@@ -24,13 +24,13 @@ const typeToSheetMap = {
 } as const;
 
 export const requestTypeSheetEndColumnMap = {
-  [RequestType.REFINING]: 'T',
+  [RequestType.REFINING]: 'U',
   [RequestType.MANUFACTURING]: 'T',
   [RequestType.DISTRIBUTING]: 'R',
 } as const;
 
 export const requestTypeSheetRequestIdCellMap = {
-  [RequestType.REFINING]: 'T',
+  [RequestType.REFINING]: 'U',
   [RequestType.MANUFACTURING]: 'T',
   [RequestType.DISTRIBUTING]: 'R',
 } as const;

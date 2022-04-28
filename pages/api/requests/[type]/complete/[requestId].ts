@@ -15,8 +15,8 @@ import {
 import isSessionValid from '../../../../../util/server/isSessionValid';
 import { authOptions } from '../../../auth/[...nextauth]';
 
-const requestTypeSheetAcceptedByColumnMap = {
-  [RequestType.REFINING]: 'J',
+const requestTypeSheetCompletedColumnMap = {
+  [RequestType.REFINING]: 'H',
   [RequestType.MANUFACTURING]: 'J',
   [RequestType.DISTRIBUTING]: 'M',
 };
@@ -51,11 +51,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           {
             values: [[SheetBool.TRUE]],
             from: {
-              column: requestTypeSheetAcceptedByColumnMap[type],
+              column: requestTypeSheetCompletedColumnMap[type],
               row: row.rowNum,
             },
             to: {
-              column: requestTypeSheetAcceptedByColumnMap[type],
+              column: requestTypeSheetCompletedColumnMap[type],
               row: row.rowNum,
             },
           },
