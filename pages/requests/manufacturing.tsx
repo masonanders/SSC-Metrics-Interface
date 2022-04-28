@@ -96,7 +96,7 @@ function Row({ row, head }: { row: DeliveryRequest; head?: boolean }) {
       </TableCell>
       <TableCell align="center">
         {(head && 'Completed') ||
-          (row.completed && <CheckCircleOutlineIcon />) ||
+          (row.completed && <CheckCircleOutlineIcon color="success" />) ||
           (row.acceptedBy === session.data.member.nick && (
             <Button
               color="primary"
@@ -107,7 +107,7 @@ function Row({ row, head }: { row: DeliveryRequest; head?: boolean }) {
             >
               Complete
             </Button>
-          )) || <CancelIcon />}
+          )) || <CancelIcon color="action" />}
       </TableCell>
     </>
   );
