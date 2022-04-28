@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const APP_BAR_HEIGHT = 64;
-export const DRAWER_WIDTH = 192;
+export const DRAWER_WIDTH = 24 * 10;
 
 export default function Layout({ children }: Props) {
   return (
@@ -101,7 +101,12 @@ function Drawer() {
           <NavLink href="/stockpiles">Stockpiles</NavLink>
           <NavLink href="/bases">Bases</NavLink>
         </List>
-        <Button sx={{ mt: 'auto' }} onClick={() => signOut()}>
+        <Button
+          color="secondary"
+          variant="outlined"
+          sx={{ mt: 'auto' }}
+          onClick={() => signOut()}
+        >
           Log out
         </Button>
       </Box>

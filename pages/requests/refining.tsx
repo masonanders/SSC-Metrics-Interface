@@ -1,5 +1,6 @@
 import {
   Button,
+  LinearProgress,
   Table,
   TableBody,
   TableCell,
@@ -56,9 +57,12 @@ export default function Refining() {
           </Table>
         </TableContainer>
       ) : (
-        <Typography sx={{ mt: 16 }} textAlign="center" variant="h4">
-          Loading
-        </Typography>
+        <>
+          <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
+            Loading
+          </Typography>
+          <LinearProgress />
+        </>
       )}
     </Layout>
   );
@@ -75,6 +79,8 @@ function Row({ row, head }: { row: RefiningRequest; head?: boolean }) {
       <TableCell align="center">
         {row.acceptedBy || (
           <Button
+            color="primary"
+            variant="contained"
             onClick={() => fetch(`/api/requests/refining/accept/${row.id}`)}
           >
             Accept
@@ -86,6 +92,8 @@ function Row({ row, head }: { row: RefiningRequest; head?: boolean }) {
           (row.completed && <CheckCircleOutlineIcon />) ||
           (row.acceptedBy === session.data.member.nick && (
             <Button
+              color="primary"
+              variant="contained"
               onClick={() => fetch(`/api/requests/refining/complete/${row.id}`)}
             >
               Complete

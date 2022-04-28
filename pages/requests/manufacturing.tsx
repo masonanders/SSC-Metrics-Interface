@@ -7,6 +7,7 @@ import {
   TableRow,
   Button,
   Typography,
+  LinearProgress,
 } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
@@ -60,9 +61,12 @@ export default function Manufacturing() {
           </Table>
         </TableContainer>
       ) : (
-        <Typography sx={{ mt: 16 }} textAlign="center" variant="h4">
-          Loading
-        </Typography>
+        <>
+          <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
+            Loading
+          </Typography>
+          <LinearProgress />
+        </>
       )}
     </Layout>
   );
@@ -80,6 +84,8 @@ function Row({ row, head }: { row: DeliveryRequest; head?: boolean }) {
       <TableCell align="center">
         {row.acceptedBy || (
           <Button
+            color="primary"
+            variant="contained"
             onClick={() =>
               fetch(`/api/requests/manufacturing/accept/${row.id}`)
             }
@@ -93,6 +99,8 @@ function Row({ row, head }: { row: DeliveryRequest; head?: boolean }) {
           (row.completed && <CheckCircleOutlineIcon />) ||
           (row.acceptedBy === session.data.member.nick && (
             <Button
+              color="primary"
+              variant="contained"
               onClick={() =>
                 fetch(`/api/requests/manufacturing/complete/${row.id}`)
               }
