@@ -1,7 +1,9 @@
+import { ThemeProvider } from '@mui/material';
 import { Session } from 'next-auth';
 import { SessionProvider, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
+import { lightTheme } from '../util/client/theme';
 
 function Application({ Component, pageProps: { session, ...pageProps } }) {
   if (typeof window === 'undefined') return null;
@@ -18,7 +20,9 @@ function Application({ Component, pageProps: { session, ...pageProps } }) {
 
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <ThemeProvider theme={lightTheme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </SessionProvider>
   );
 }
