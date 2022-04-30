@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   Typography,
-  LinearProgress,
   TableCell,
 } from '@mui/material';
 import { Request } from '../util/requests/types';
@@ -18,13 +17,17 @@ export default function Table<R extends Request>({
   rows: R[];
   RowComponent: FunctionComponent<{ row: R; head?: boolean }>;
 }) {
-  return rows.length ? (
-    <TableContainer sx={{ mt: 8 }}>
+  return (
+    <TableContainer
+      sx={{ position: 'relative', height: '100%', overflow: 'auto' }}
+    >
       <MuiTable>
-        <TableHead>
+        <TableHead
+          sx={{ bgcolor: 'white', position: 'sticky', top: 0, zIndex: 1 }}
+        >
           <RowComponent head row={rows[0]} />
         </TableHead>
-        <TableBody>
+        <TableBody sx={{ zIndex: 0 }}>
           {rows.length > 1 ? (
             rows.slice(1).map((row) => (
               <TableRow key={row.id}>
@@ -41,12 +44,5 @@ export default function Table<R extends Request>({
         </TableBody>
       </MuiTable>
     </TableContainer>
-  ) : (
-    <>
-      <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
-        Loading
-      </Typography>
-      <LinearProgress />
-    </>
   );
 }

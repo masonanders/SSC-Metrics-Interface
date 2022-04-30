@@ -1,4 +1,4 @@
-import { TableCell, Button } from '@mui/material';
+import { TableCell, Button, Typography, LinearProgress } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import Layout from '../../components/Layout';
@@ -9,7 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import usePolling from '../../util/client/usePolling';
 import { DeliveryRequest } from '../../util/requests/types';
 import { useSession } from 'next-auth/react';
-import Table from '../../components/Table';
+import AcceptedAndOpenTables from '../../components/AcceptedAndAllOrdersTables';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -28,12 +28,67 @@ export default function Manufacturing() {
 
   return (
     <Layout>
-      <Table rows={rows} RowComponent={Row} />
+      {!rows.length ? (
+        <>
+          <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
+            Loading
+          </Typography>
+          <LinearProgress />
+        </>
+      ) : (
+        <AcceptedAndOpenTables
+          rows={rows}
+          AcceptedOrdersRow={AcceptedRow}
+          OpenOrdersRow={OpenRow}
+        />
+      )}
     </Layout>
   );
 }
 
-function Row({ row, head }: { row: DeliveryRequest; head?: boolean }) {
+function AcceptedRow({ row, head }: { row: DeliveryRequest; head?: boolean }) {
+  const session = useSession();
+  return (
+    <>
+      <TableCell>{row.item}</TableCell>
+      <TableCell align="center">{row.quantity || '#'}</TableCell>
+      <TableCell>{row.category}</TableCell>
+      <TableCell>{row.deliveryLocation}</TableCell>
+      <TableCell>{row.priority}</TableCell>
+      <TableCell align="center">
+        {head ? (
+          'Accepted'
+        ) : (
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={() =>
+              fetch(`/api/requests/manufacturing/reject/${row.id}`)
+            }
+          >
+            Drop
+          </Button>
+        )}
+      </TableCell>
+      <TableCell align="center">
+        {(head && 'Completed') ||
+          (row.completed && <CheckCircleOutlineIcon color="success" />) ||
+          (row.acceptedBy === session.data.member.nick && (
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() =>
+                fetch(`/api/requests/manufacturing/complete/${row.id}`)
+              }
+            >
+              Complete
+            </Button>
+          )) || <CancelIcon color="action" />}
+      </TableCell>
+    </>
+  );
+}
+function OpenRow({ row, head }: { row: DeliveryRequest; head?: boolean }) {
   const session = useSession();
   return (
     <>

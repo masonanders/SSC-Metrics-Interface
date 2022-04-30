@@ -1,4 +1,4 @@
-import { Button, TableCell } from '@mui/material';
+import { Button, LinearProgress, TableCell, Typography } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
@@ -9,7 +9,7 @@ import { validateSession } from '../../util/validateSession';
 import { authOptions } from '../api/auth/[...nextauth]';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
-import Table from '../../components/Table';
+import AcceptedAndOpenTables from '../../components/AcceptedAndAllOrdersTables';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -24,12 +24,31 @@ export default function Refining() {
 
   return (
     <Layout>
-      <Table rows={rows} RowComponent={Row} />
+      {!rows.length ? (
+        <>
+          <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
+            Loading
+          </Typography>
+          <LinearProgress />
+        </>
+      ) : (
+        <AcceptedAndOpenTables
+          rows={rows}
+          AcceptedOrdersRow={AcceptedRow}
+          OpenOrdersRow={OpenRow}
+        />
+      )}
     </Layout>
   );
 }
 
-function Row({ row, head }: { row: RefiningRequest; head?: boolean }) {
+function AcceptedRow({
+  row,
+  head = false,
+}: {
+  row: RefiningRequest;
+  head?: boolean;
+}) {
   const session = useSession();
   return (
     <>
@@ -38,7 +57,53 @@ function Row({ row, head }: { row: RefiningRequest; head?: boolean }) {
       <TableCell>{row.category}</TableCell>
       <TableCell>{row.refineryZone}</TableCell>
       <TableCell align="center">
-        {row.acceptedBy || (
+        {head ? (
+          'Accepted'
+        ) : (
+          <Button
+            onClick={() => fetch(`/api/requests/refining/reject/${row.id}`)}
+            color="secondary"
+            variant="outlined"
+          >
+            Drop
+          </Button>
+        )}
+      </TableCell>
+      <TableCell align="center">
+        {(head && 'Completed') ||
+          (row.completed && <CheckCircleOutlineIcon color="success" />) ||
+          (row.acceptedBy === session.data.member.nick && (
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => fetch(`/api/requests/refining/complete/${row.id}`)}
+            >
+              Complete
+            </Button>
+          )) || <CancelIcon color="action" />}
+      </TableCell>
+    </>
+  );
+}
+
+function OpenRow({
+  row,
+  head = false,
+}: {
+  row: RefiningRequest;
+  head?: boolean;
+}) {
+  const session = useSession();
+  return (
+    <>
+      <TableCell>{row.item}</TableCell>
+      <TableCell align="center">{row.quantity || '#'}</TableCell>
+      <TableCell>{row.category}</TableCell>
+      <TableCell>{row.refineryZone}</TableCell>
+      <TableCell align="center">
+        {head ? (
+          row.acceptedBy
+        ) : (
           <Button
             color="primary"
             variant="contained"
