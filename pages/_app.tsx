@@ -8,9 +8,7 @@ import { lightTheme } from '../util/client/theme';
 function Application({ Component, pageProps: { session, ...pageProps } }) {
   if (typeof window === 'undefined') return null;
   const { query, replace, pathname } = useRouter();
-  console.log(query);
   if (Object.keys(query).length) {
-    console.log(pathname);
     replace(pathname, undefined, { shallow: true });
   }
 

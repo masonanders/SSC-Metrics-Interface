@@ -1,14 +1,4 @@
-import {
-  Button,
-  LinearProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Button, TableCell } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
@@ -19,6 +9,7 @@ import { authOptions } from './../api/auth/[...nextauth]';
 import usePolling from '../../util/client/usePolling';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
+import Table from '../../components/Table';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -35,37 +26,7 @@ export default function Distributing() {
 
   return (
     <Layout>
-      {rows.length ? (
-        <TableContainer sx={{ mt: 8 }}>
-          <Table>
-            <TableHead>
-              <Row head row={rows[0]} />
-            </TableHead>
-            <TableBody>
-              {rows.slice(1).length ? (
-                rows.slice(1).map((row) => (
-                  <TableRow key={row.id}>
-                    <Row row={row} />
-                  </TableRow>
-                ))
-              ) : (
-                <TableCell colSpan={8}>
-                  <Typography sx={{ my: 4 }} textAlign="center" variant="h4">
-                    No requests
-                  </Typography>
-                </TableCell>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <>
-          <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
-            Loading
-          </Typography>
-          <LinearProgress />
-        </>
-      )}
+      <Table rows={rows} RowComponent={Row} />
     </Layout>
   );
 }

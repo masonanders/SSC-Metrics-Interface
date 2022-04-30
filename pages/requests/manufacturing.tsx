@@ -1,14 +1,4 @@
-import {
-  TableCell,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Button,
-  Typography,
-  LinearProgress,
-} from '@mui/material';
+import { TableCell, Button } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import Layout from '../../components/Layout';
@@ -19,6 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import usePolling from '../../util/client/usePolling';
 import { DeliveryRequest } from '../../util/requests/types';
 import { useSession } from 'next-auth/react';
+import Table from '../../components/Table';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -37,37 +28,7 @@ export default function Manufacturing() {
 
   return (
     <Layout>
-      {rows.length ? (
-        <TableContainer sx={{ mt: 8 }}>
-          <Table>
-            <TableHead>
-              <Row head row={rows[0]} />
-            </TableHead>
-            <TableBody>
-              {rows.slice(1).length ? (
-                rows.slice(1).map((row) => (
-                  <TableRow key={row.id}>
-                    <Row row={row} />
-                  </TableRow>
-                ))
-              ) : (
-                <TableCell colSpan={7}>
-                  <Typography textAlign="center" sx={{ py: 4 }} variant="h4">
-                    No requests
-                  </Typography>
-                </TableCell>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <>
-          <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
-            Loading
-          </Typography>
-          <LinearProgress />
-        </>
-      )}
+      <Table rows={rows} RowComponent={Row} />
     </Layout>
   );
 }
