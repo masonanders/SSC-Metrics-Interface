@@ -101,9 +101,7 @@ function OpenRow({
       <TableCell>{row.category}</TableCell>
       <TableCell>{row.refineryZone}</TableCell>
       <TableCell align="center">
-        {head ? (
-          row.acceptedBy
-        ) : (
+        {row.acceptedBy || (
           <Button
             color="primary"
             variant="contained"
