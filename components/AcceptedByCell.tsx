@@ -18,7 +18,7 @@ export default function AcceptedByCell<R extends Request>({
 
   return head ? (
     <>Accepted by</>
-  ) : isAcceptedByCurrentUser ? (
+  ) : isAcceptedByCurrentUser && !request.completed ? (
     <Button
       onClick={() => fetch(`/api/requests/${requestType}/reject/${request.id}`)}
       color="secondary"
