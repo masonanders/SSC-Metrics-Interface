@@ -19,23 +19,21 @@ export default function AcceptedAndOpenTables<R extends Request>({
   const [showOpenCompletedOrders, toggleShowOpenCompletedOrders] =
     useState<boolean>(false);
   const { acceptedRows, openRows } = rows.slice(1).reduce<{
-    acceptedRows: R[];
-    openRows: R[];
+    acceptedRows: { incomplete: R[]; complete: R[] };
+    openRows: { incomplete: R[]; complete: R[] };
   }>(
     (acc, row) => {
       if (session.data.member.nick === row.acceptedBy) {
-        if (!row.completed || showAcceptedCompletedOrders) {
-          acc.acceptedRows.push(row);
-        }
-      } else if (!row.completed || showOpenCompletedOrders) {
-        acc.openRows.push(row);
+        acc.acceptedRows[row.completed ? 'complete' : 'incomplete'].push(row);
+      } else if (!row.completed) {
+        acc.openRows[row.completed ? 'complete' : 'incomplete'].push(row);
       }
 
       return acc;
     },
     {
-      acceptedRows: [],
-      openRows: [],
+      acceptedRows: { incomplete: [], complete: [] },
+      openRows: { incomplete: [], complete: [] },
     }
   );
 
@@ -53,28 +51,33 @@ export default function AcceptedAndOpenTables<R extends Request>({
           <Typography fontWeight="bold" variant="h6">
             Accepted by you
           </Typography>
-          <Box
-            display="flex"
-            alignItems="center"
-            sx={{
-              '&:hover': {
-                cursor: 'pointer`',
-              },
-            }}
-          >
+          <Box display="flex" alignItems="center">
             <Checkbox
-              disabled={!acceptedRows.length}
+              disabled={!acceptedRows.complete.length}
               onClick={() =>
                 toggleShowAcceptedCompletedOrders(!showAcceptedCompletedOrders)
               }
               checked={showAcceptedCompletedOrders}
               size="small"
             />
-            <Typography variant="body2">Show completed</Typography>
+            <Typography
+              variant="body2"
+              color={(theme) =>
+                theme.palette.text[
+                  acceptedRows.complete.length ? 'primary' : 'disabled'
+                ]
+              }
+            >
+              Show completed
+            </Typography>
           </Box>
         </Box>
         <Table
-          rows={[rowHead, ...acceptedRows]}
+          rows={[
+            rowHead,
+            ...acceptedRows.incomplete,
+            ...(showAcceptedCompletedOrders ? acceptedRows.complete : []),
+          ]}
           RowConstructor={RowConstructor}
         />
       </Box>
@@ -83,27 +86,35 @@ export default function AcceptedAndOpenTables<R extends Request>({
           <Typography fontWeight="bold" variant="h6">
             Open orders
           </Typography>
-          <Box
-            display="flex"
-            alignItems="center"
-            sx={{
-              '&:hover': {
-                cursor: 'pointer`',
-              },
-            }}
-          >
+          <Box display="flex" alignItems="center">
             <Checkbox
-              disabled={!openRows.length}
+              disabled={!openRows.complete.length}
               onClick={() =>
                 toggleShowOpenCompletedOrders(!showOpenCompletedOrders)
               }
               checked={showOpenCompletedOrders}
               size="small"
             />
-            <Typography variant="body2">Show completed</Typography>
+            <Typography
+              variant="body2"
+              color={(theme) =>
+                theme.palette.text[
+                  openRows.complete.length ? 'primary' : 'disabled'
+                ]
+              }
+            >
+              Show completed
+            </Typography>
           </Box>
         </Box>
-        <Table rows={[rowHead, ...openRows]} RowConstructor={RowConstructor} />
+        <Table
+          rows={[
+            rowHead,
+            ...openRows.incomplete,
+            ...(showOpenCompletedOrders ? openRows.complete : []),
+          ]}
+          RowConstructor={RowConstructor}
+        />
       </Box>
     </Box>
   );
