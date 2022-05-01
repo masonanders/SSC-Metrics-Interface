@@ -10,6 +10,7 @@ import usePolling from '../../util/client/usePolling';
 import { DeliveryRequest } from '../../util/requests/types';
 import { useSession } from 'next-auth/react';
 import AcceptedAndOpenTables from '../../components/AcceptedAndAllOrdersTables';
+import Loading from '../../components/Loading';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -29,12 +30,7 @@ export default function Manufacturing() {
   return (
     <Layout>
       {!rows.length ? (
-        <>
-          <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
-            Loading
-          </Typography>
-          <LinearProgress />
-        </>
+        <Loading />
       ) : (
         <AcceptedAndOpenTables
           rows={rows}

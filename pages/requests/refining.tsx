@@ -10,6 +10,7 @@ import { authOptions } from '../api/auth/[...nextauth]';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AcceptedAndOpenTables from '../../components/AcceptedAndAllOrdersTables';
+import Loading from '../../components/Loading';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -25,12 +26,7 @@ export default function Refining() {
   return (
     <Layout>
       {!rows.length ? (
-        <>
-          <Typography sx={{ mt: 24, mb: 12 }} textAlign="center" variant="h4">
-            Loading
-          </Typography>
-          <LinearProgress />
-        </>
+        <Loading />
       ) : (
         <AcceptedAndOpenTables
           rows={rows}
