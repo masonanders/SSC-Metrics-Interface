@@ -63,6 +63,7 @@ export default function AcceptedAndOpenTables<R extends Request>({
             }}
           >
             <Checkbox
+              disabled={!acceptedRows.length}
               onClick={() =>
                 toggleShowAcceptedCompletedOrders(!showAcceptedCompletedOrders)
               }
@@ -92,6 +93,7 @@ export default function AcceptedAndOpenTables<R extends Request>({
             }}
           >
             <Checkbox
+              disabled={!openRows.length}
               onClick={() =>
                 toggleShowOpenCompletedOrders(!showOpenCompletedOrders)
               }
