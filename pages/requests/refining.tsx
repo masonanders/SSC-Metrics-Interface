@@ -2,7 +2,6 @@ import { TableCell, TableRow } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import Layout from '../../components/Layout';
-import usePolling from '../../util/client/usePolling';
 import { RefiningRequest, RequestType } from '../../util/requests/types';
 import { validateSession } from '../../util/validateSession';
 import { authOptions } from '../api/auth/[...nextauth]';
@@ -10,6 +9,7 @@ import AcceptedAndOpenTables from '../../components/AcceptedAndAllOrdersTables';
 import AcceptedByCell from '../../components/AcceptedByCell';
 import CompletedCell from '../../components/CompletedCell';
 import Loading from '../../components/Loading';
+import usePollRequests from '../../util/client/usePollRequests';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -20,7 +20,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Refining() {
-  const { rows } = usePolling<RefiningRequest>('/api/requests/refining/get');
+  const rows = usePollRequests<RefiningRequest>(RequestType.REFINING);
 
   return (
     <Layout>

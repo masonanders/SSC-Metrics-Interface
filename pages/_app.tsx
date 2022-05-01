@@ -3,6 +3,7 @@ import { Session } from 'next-auth';
 import { SessionProvider, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
+import { RequestUpdateBufferContextProvider } from '../util/client/requestUpdateBuffer';
 import { lightTheme } from '../util/client/theme';
 
 function Application({ Component, pageProps: { session, ...pageProps } }) {
@@ -19,7 +20,9 @@ function Application({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
       <ThemeProvider theme={lightTheme}>
-        <Component {...pageProps} />
+        <RequestUpdateBufferContextProvider>
+          <Component {...pageProps} />
+        </RequestUpdateBufferContextProvider>
       </ThemeProvider>
     </SessionProvider>
   );

@@ -5,11 +5,11 @@ import Layout from '../../components/Layout';
 import { DeliveryRequest, RequestType } from '../../util/requests/types';
 import { validateSession } from '../../util/validateSession';
 import { authOptions } from './../api/auth/[...nextauth]';
-import usePolling from '../../util/client/usePolling';
 import AcceptedAndOpenTables from '../../components/AcceptedAndAllOrdersTables';
 import AcceptedByCell from '../../components/AcceptedByCell';
 import CompletedCell from '../../components/CompletedCell';
 import Loading from '../../components/Loading';
+import usePollRequests from '../../util/client/usePollRequests';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -20,9 +20,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Distributing() {
-  const { rows } = usePolling<DeliveryRequest>(
-    '/api/requests/distributing/get'
-  );
+  const rows = usePollRequests<DeliveryRequest>(RequestType.DISTRIBUTING);
 
   return (
     <Layout>

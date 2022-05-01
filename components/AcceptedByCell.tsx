@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import { useSession } from 'next-auth/react';
-import { ReactElement } from 'react';
+import { ReactElement, useContext } from 'react';
+import { RequestUpdateBufferContext } from '../util/client/requestUpdateBuffer';
 import { Request, RequestType } from '../util/requests/types';
 
 export default function AcceptedByCell<R extends Request>({
@@ -15,12 +16,22 @@ export default function AcceptedByCell<R extends Request>({
   const session = useSession();
   const isAcceptedByCurrentUser =
     request.acceptedBy === session.data.member.nick;
+  const { isRequestUpdating, startUpdatingRequests, stopUpdatingRequests } =
+    useContext(RequestUpdateBufferContext);
 
   return head ? (
     <>Accepted by</>
   ) : isAcceptedByCurrentUser && !request.completed ? (
     <Button
-      onClick={() => fetch(`/api/requests/${requestType}/reject/${request.id}`)}
+      disabled={isRequestUpdating(request)}
+      onClick={async () => {
+        try {
+          startUpdatingRequests([request]);
+          fetch(`/api/requests/${requestType}/reject/${request.id}`);
+        } catch {
+          stopUpdatingRequests([request]);
+        }
+      }}
       color="secondary"
       variant="outlined"
     >
@@ -30,9 +41,17 @@ export default function AcceptedByCell<R extends Request>({
     <>{request.acceptedBy}</>
   ) : (
     <Button
+      disabled={isRequestUpdating(request)}
       color="primary"
       variant="contained"
-      onClick={() => fetch(`/api/requests/${requestType}/accept/${request.id}`)}
+      onClick={() => {
+        try {
+          startUpdatingRequests([request]);
+          fetch(`/api/requests/${requestType}/accept/${request.id}`);
+        } catch {
+          stopUpdatingRequests([request]);
+        }
+      }}
     >
       Accept
     </Button>
