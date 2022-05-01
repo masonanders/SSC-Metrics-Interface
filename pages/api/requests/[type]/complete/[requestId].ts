@@ -3,23 +3,20 @@ import { getServerSession } from 'next-auth';
 import {
   getRequestData,
   processRows,
-  requestTypeSheetEndColumnMap,
   updateRequestData,
   validateRequestTypeParam,
 } from '../../../../../util/requests';
-import { RequestType } from '../../../../../util/requests/types';
+import {
+  requestTypeSheetCompletedColumnMap,
+  requestTypeSheetEndColumnMap,
+  requestTypeSheetTimeCompletedColumnMap,
+} from '../../../../../util/requests/columnMappings';
 import {
   SheetBool,
   ValueInputOption,
 } from '../../../../../util/server/googleSheets/types';
 import isSessionValid from '../../../../../util/server/isSessionValid';
 import { authOptions } from '../../../auth/[...nextauth]';
-
-const requestTypeSheetCompletedColumnMap = {
-  [RequestType.REFINING]: 'H',
-  [RequestType.MANUFACTURING]: 'J',
-  [RequestType.DISTRIBUTING]: 'M',
-};
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession({ req, res }, authOptions);
@@ -56,6 +53,17 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
             },
             to: {
               column: requestTypeSheetCompletedColumnMap[type],
+              row: row.rowNum,
+            },
+          },
+          {
+            values: [[new Date().toUTCString()]],
+            from: {
+              column: requestTypeSheetTimeCompletedColumnMap[type],
+              row: row.rowNum,
+            },
+            to: {
+              column: requestTypeSheetTimeCompletedColumnMap[type],
               row: row.rowNum,
             },
           },

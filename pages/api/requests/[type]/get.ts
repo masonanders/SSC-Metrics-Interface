@@ -5,13 +5,15 @@ import isMemberWithinScope from '../../../../util/server/isMemberWithinScope';
 import {
   getRequestData,
   processRows,
-  requestTypeSheetEndColumnMap,
-  requestTypeSheetRequestIdCellMap,
   updateRequestData,
   validateRequestTypeParam,
 } from '../../../../util/requests';
 import isSessionValid from '../../../../util/server/isSessionValid';
 import { authOptions } from '../../auth/[...nextauth]';
+import {
+  requestTypeSheetEndColumnMap,
+  requestTypeSheetRequestIdCellMap,
+} from '../../../../util/requests/columnMappings';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession({ req, res }, authOptions);

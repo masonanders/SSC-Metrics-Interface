@@ -23,18 +23,6 @@ const typeToSheetMap = {
   [RequestType.DISTRIBUTING]: Sheet.DELIVERY_REQUESTS,
 } as const;
 
-export const requestTypeSheetEndColumnMap = {
-  [RequestType.REFINING]: 'U',
-  [RequestType.MANUFACTURING]: 'T',
-  [RequestType.DISTRIBUTING]: 'R',
-} as const;
-
-export const requestTypeSheetRequestIdCellMap = {
-  [RequestType.REFINING]: 'U',
-  [RequestType.MANUFACTURING]: 'T',
-  [RequestType.DISTRIBUTING]: 'R',
-} as const;
-
 export function validateRequestTypeParam(
   type: string | string[]
 ): type is RequestType {
@@ -71,9 +59,9 @@ export function processRefiningRequestsRow(
     requiredCopper,
     craftTime,
     confirmed,
-    timeCompleted,
     timeRequested,
     timeAccepted,
+    timeCompleted,
     uniqueId,
   ] = row;
   return {
@@ -95,9 +83,9 @@ export function processRefiningRequestsRow(
     requiredCopper: parseInt(requiredCopper),
     craftTime,
     confirmed: confirmed && confirmed === SheetBool.TRUE,
-    timeCompleted: new Date(timeCompleted).getTime(),
     timeRequested: new Date(timeRequested).getTime(),
     timeAccepted: new Date(timeAccepted).getTime(),
+    timeCompleted: new Date(timeCompleted).getTime(),
     id: uniqueId,
   };
 }

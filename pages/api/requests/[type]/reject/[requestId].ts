@@ -3,19 +3,16 @@ import { getServerSession } from 'next-auth';
 import {
   getRequestData,
   processRows,
-  requestTypeSheetEndColumnMap,
   updateRequestData,
   validateRequestTypeParam,
 } from '../../../../../util/requests';
-import { RequestType } from '../../../../../util/requests/types';
+import {
+  requestTypeSheetAcceptedByColumnMap,
+  requestTypeSheetEndColumnMap,
+  requestTypeSheetTimeAcceptedColumnMap,
+} from '../../../../../util/requests/columnMappings';
 import isSessionValid from '../../../../../util/server/isSessionValid';
 import { authOptions } from '../../../auth/[...nextauth]';
-
-const requestTypeSheetAcceptedByColumnMap = {
-  [RequestType.REFINING]: 'G',
-  [RequestType.MANUFACTURING]: 'I',
-  [RequestType.DISTRIBUTING]: 'L',
-};
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession({ req, res }, authOptions);
@@ -50,6 +47,17 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           },
           to: {
             column: requestTypeSheetAcceptedByColumnMap[type],
+            row: row.rowNum,
+          },
+        },
+        {
+          values: [['']],
+          from: {
+            column: requestTypeSheetTimeAcceptedColumnMap[type],
+            row: row.rowNum,
+          },
+          to: {
+            column: requestTypeSheetTimeAcceptedColumnMap[type],
             row: row.rowNum,
           },
         },
