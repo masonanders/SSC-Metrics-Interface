@@ -45,19 +45,19 @@ function RowConstructor({
   return (
     <TableRow>
       <TableCell>{head ? 'Item name' : row.item}</TableCell>
-      <TableCell>{head ? '#' : row.quantity}</TableCell>
+      <TableCell align="center">{head ? '#' : row.quantity}</TableCell>
       <TableCell>{head ? 'Category' : row.category}</TableCell>
       <TableCell>{head ? 'Pickup location' : row.pickupLocation}</TableCell>
       <TableCell>{head ? 'Delivery location' : row.deliveryLocation}</TableCell>
       <TableCell>{head ? 'Priority' : row.priority}</TableCell>
-      <TableCell>
+      <TableCell align="center">
         <AcceptedByCell
           requestType={RequestType.DISTRIBUTING}
           request={row}
           head={head}
         />
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <CompletedCell
           requestType={RequestType.DISTRIBUTING}
           request={row}

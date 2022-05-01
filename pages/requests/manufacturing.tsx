@@ -47,18 +47,18 @@ function RowConstructor({
   return (
     <TableRow>
       <TableCell>{head ? 'Item name' : row.item}</TableCell>
-      <TableCell>{head ? '#' : row.quantity}</TableCell>
+      <TableCell align="center">{head ? '#' : row.quantity}</TableCell>
       <TableCell>{head ? 'Category' : row.category}</TableCell>
       <TableCell>{head ? 'Refinery zone' : row.deliveryLocation}</TableCell>
       <TableCell>{head ? 'Priority' : row.priority}</TableCell>
-      <TableCell>
+      <TableCell align="center">
         <AcceptedByCell
           requestType={RequestType.MANUFACTURING}
           request={row}
           head={head}
         />
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <CompletedCell
           requestType={RequestType.MANUFACTURING}
           request={row}

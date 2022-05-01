@@ -43,17 +43,17 @@ function RowConstrctor({
   return (
     <TableRow>
       <TableCell>{head ? 'Item name' : row.item}</TableCell>
-      <TableCell>{head ? '#' : row.quantity}</TableCell>
+      <TableCell align="center">{head ? '#' : row.quantity}</TableCell>
       <TableCell>{head ? 'Category' : row.category}</TableCell>
       <TableCell>{head ? 'Refinery zone' : row.refineryZone}</TableCell>
-      <TableCell>
+      <TableCell align="center">
         <AcceptedByCell
           requestType={RequestType.REFINING}
           request={row}
           head={head}
         />
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <CompletedCell
           requestType={RequestType.REFINING}
           request={row}
