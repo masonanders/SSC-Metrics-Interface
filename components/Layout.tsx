@@ -90,7 +90,7 @@ function Drawer() {
           {session.data?.member?.nick}
         </Typography>
         <List>
-          <ListItem>Requests</ListItem>
+          <ListItem>Supply Orders</ListItem>
           <List sx={{ pl: 2 }}>
             <NavLink href="/requests/refining">Refining</NavLink>
             <NavLink href="/requests/manufacturing">Manufacturing</NavLink>
