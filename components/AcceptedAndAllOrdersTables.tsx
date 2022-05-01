@@ -7,18 +7,10 @@ import Table from './Table';
 
 export default function AcceptedAndOpenTables<R extends Request>({
   rows,
-  AcceptedOrdersRow,
-  OpenOrdersRow,
+  RowConstructor,
 }: {
   rows: R[];
-  AcceptedOrdersRow: FunctionComponent<{
-    row: R;
-    head?: boolean;
-  }>;
-  OpenOrdersRow: FunctionComponent<{
-    row: R;
-    head?: boolean;
-  }>;
+  RowConstructor: FunctionComponent<{ row: R; head?: boolean }>;
 }) {
   const session = useSession();
   const rowHead = rows[0];
@@ -54,14 +46,14 @@ export default function AcceptedAndOpenTables<R extends Request>({
         </Typography>
         <Table
           rows={[rowHead, ...acceptedRows]}
-          RowComponent={AcceptedOrdersRow}
+          RowConstructor={RowConstructor}
         />
       </Box>
       <Box display="flex" flexDirection="column" overflow="hidden">
         <Typography fontWeight="bold" variant="h6">
           Open orders
         </Typography>
-        <Table rows={[rowHead, ...openRows]} RowComponent={OpenOrdersRow} />
+        <Table rows={[rowHead, ...openRows]} RowConstructor={RowConstructor} />
       </Box>
     </Box>
   );

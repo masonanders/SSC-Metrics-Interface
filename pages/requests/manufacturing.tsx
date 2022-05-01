@@ -1,15 +1,14 @@
-import { TableCell, Button, Typography, LinearProgress } from '@mui/material';
+import { TableCell, TableRow } from '@mui/material';
 import { GetServerSidePropsContext } from 'next';
 import { getServerSession } from 'next-auth';
 import Layout from '../../components/Layout';
 import { validateSession } from '../../util/validateSession';
 import { authOptions } from '../api/auth/[...nextauth]';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import CancelIcon from '@mui/icons-material/Cancel';
 import usePolling from '../../util/client/usePolling';
-import { DeliveryRequest } from '../../util/requests/types';
-import { useSession } from 'next-auth/react';
+import { ManufacturingRequest, RequestType } from '../../util/requests/types';
 import AcceptedAndOpenTables from '../../components/AcceptedAndAllOrdersTables';
+import AcceptedByCell from '../../components/AcceptedByCell';
+import CompletedCell from '../../components/CompletedCell';
 import Loading from '../../components/Loading';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -23,7 +22,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Manufacturing() {
-  const { rows } = usePolling<DeliveryRequest>(
+  const { rows } = usePolling<ManufacturingRequest>(
     '/api/requests/manufacturing/get'
   );
 
@@ -32,95 +31,40 @@ export default function Manufacturing() {
       {!rows.length ? (
         <Loading />
       ) : (
-        <AcceptedAndOpenTables
-          rows={rows}
-          AcceptedOrdersRow={AcceptedRow}
-          OpenOrdersRow={OpenRow}
-        />
+        <AcceptedAndOpenTables rows={rows} RowConstructor={RowConstructor} />
       )}
     </Layout>
   );
 }
 
-function AcceptedRow({ row, head }: { row: DeliveryRequest; head?: boolean }) {
-  const session = useSession();
+function RowConstructor({
+  row,
+  head,
+}: {
+  row: ManufacturingRequest;
+  head?: boolean;
+}) {
   return (
-    <>
-      <TableCell>{row.item}</TableCell>
-      <TableCell align="center">{row.quantity || '#'}</TableCell>
-      <TableCell>{row.category}</TableCell>
-      <TableCell>{row.deliveryLocation}</TableCell>
-      <TableCell>{row.priority}</TableCell>
-      <TableCell align="center">
-        {head ? (
-          'Accepted'
-        ) : (
-          <Button
-            color="secondary"
-            variant="outlined"
-            onClick={() =>
-              fetch(`/api/requests/manufacturing/reject/${row.id}`)
-            }
-          >
-            Drop
-          </Button>
-        )}
+    <TableRow>
+      <TableCell>{head ? 'Item name' : row.item}</TableCell>
+      <TableCell>{head ? '#' : row.quantity}</TableCell>
+      <TableCell>{head ? 'Category' : row.category}</TableCell>
+      <TableCell>{head ? 'Refinery zone' : row.deliveryLocation}</TableCell>
+      <TableCell>{head ? 'Priority' : row.priority}</TableCell>
+      <TableCell>
+        <AcceptedByCell
+          requestType={RequestType.MANUFACTURING}
+          request={row}
+          head={head}
+        />
       </TableCell>
-      <TableCell align="center">
-        {(head && 'Completed') ||
-          (row.completed && <CheckCircleOutlineIcon color="success" />) ||
-          (row.acceptedBy === session.data.member.nick && (
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                fetch(`/api/requests/manufacturing/complete/${row.id}`)
-              }
-            >
-              Complete
-            </Button>
-          )) || <CancelIcon color="action" />}
+      <TableCell>
+        <CompletedCell
+          requestType={RequestType.MANUFACTURING}
+          request={row}
+          head={head}
+        />
       </TableCell>
-    </>
-  );
-}
-function OpenRow({ row, head }: { row: DeliveryRequest; head?: boolean }) {
-  const session = useSession();
-  return (
-    <>
-      <TableCell>{row.item}</TableCell>
-      <TableCell align="center">{row.quantity || '#'}</TableCell>
-      <TableCell>{row.category}</TableCell>
-      <TableCell>{row.deliveryLocation}</TableCell>
-      <TableCell>{row.priority}</TableCell>
-      <TableCell align="center">
-        {row.acceptedBy || (
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() =>
-              fetch(`/api/requests/manufacturing/accept/${row.id}`)
-            }
-          >
-            Accept
-          </Button>
-        )}
-      </TableCell>
-      <TableCell align="center">
-        {(head && 'Completed') ||
-          (row.completed && <CheckCircleOutlineIcon color="success" />) ||
-          (row.acceptedBy === session.data.member.nick && (
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() =>
-                fetch(`/api/requests/manufacturing/complete/${row.id}`)
-              }
-            >
-              Complete
-            </Button>
-          )) || <CancelIcon color="action" />}
-      </TableCell>
-    </>
+    </TableRow>
   );
 }
