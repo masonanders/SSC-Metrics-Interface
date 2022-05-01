@@ -1,7 +1,7 @@
 import { Checkbox, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useSession } from 'next-auth/react';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useMemo, useState } from 'react';
 import { Request } from '../util/requests/types';
 import Table from './Table';
 
@@ -18,23 +18,29 @@ export default function AcceptedAndOpenTables<R extends Request>({
     useState<boolean>(false);
   const [showOpenCompletedOrders, toggleShowOpenCompletedOrders] =
     useState<boolean>(false);
-  const { acceptedRows, openRows } = rows.slice(1).reduce<{
-    acceptedRows: { incomplete: R[]; complete: R[] };
-    openRows: { incomplete: R[]; complete: R[] };
-  }>(
-    (acc, row) => {
-      if (session.data.member.nick === row.acceptedBy) {
-        acc.acceptedRows[row.completed ? 'complete' : 'incomplete'].push(row);
-      } else if (!row.completed) {
-        acc.openRows[row.completed ? 'complete' : 'incomplete'].push(row);
-      }
+  const { acceptedRows, openRows } = useMemo(
+    () =>
+      rows.slice(1).reduce<{
+        acceptedRows: { incomplete: R[]; complete: R[] };
+        openRows: { incomplete: R[]; complete: R[] };
+      }>(
+        (acc, row) => {
+          if (session.data.member.nick === row.acceptedBy) {
+            acc.acceptedRows[row.completed ? 'complete' : 'incomplete'].push(
+              row
+            );
+          } else {
+            acc.openRows[row.completed ? 'complete' : 'incomplete'].push(row);
+          }
 
-      return acc;
-    },
-    {
-      acceptedRows: { incomplete: [], complete: [] },
-      openRows: { incomplete: [], complete: [] },
-    }
+          return acc;
+        },
+        {
+          acceptedRows: { incomplete: [], complete: [] },
+          openRows: { incomplete: [], complete: [] },
+        }
+      ),
+    [session, rows]
   );
 
   return (
