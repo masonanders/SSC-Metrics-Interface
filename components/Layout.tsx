@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { ReactNode } from 'react';
 
 interface Props {
@@ -113,9 +114,13 @@ function Drawer() {
 }
 
 function NavLink({ href, children }: { href: string; children: ReactNode }) {
+  const router = useRouter();
+
   return (
     <Link href={href}>
-      <ListItemButton>{children}</ListItemButton>
+      <ListItemButton selected={router.pathname === href}>
+        {children}
+      </ListItemButton>
     </Link>
   );
 }
