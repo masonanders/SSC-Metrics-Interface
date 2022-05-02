@@ -32,6 +32,7 @@ export default function AcceptedByCell<R extends Request>({
           stopUpdatingRequests([request]);
         }
       }}
+      size="small"
       color="secondary"
       variant="outlined"
     >
@@ -42,6 +43,7 @@ export default function AcceptedByCell<R extends Request>({
   ) : (
     <Button
       disabled={isRequestUpdating(request)}
+      size="small"
       color="primary"
       variant="contained"
       onClick={() => {

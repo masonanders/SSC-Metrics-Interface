@@ -25,6 +25,7 @@ export default function CompletedCell<R extends Request>({
     <CheckCircleOutlineIcon color="success" />
   ) : request.acceptedBy === session.data.member.nick ? (
     <Button
+      size="small"
       disabled={isRequestUpdating(request)}
       color="primary"
       variant="contained"
