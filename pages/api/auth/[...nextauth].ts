@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
-import { LOGIN_SCOPE } from '../../../util/userScope';
+import { LOGIN_SCOPE } from '../../../util/constants';
 import { HTTPNotFoundError } from '../../../util/customErrors';
 import fetchDiscordMember from '../../../util/fetchDiscordMember';
 import isExpired from '../../../util/isExpired';

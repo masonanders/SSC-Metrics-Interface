@@ -56,4 +56,4 @@ export const PUBLIC_SCOPE: UserScope = new Set([
   FWGMemberRole.RECRUIT,
 ]);
 
-export const LOGIN_SCOPE: UserScope = new Set([...PUBLIC_SCOPE]);
+export const LOGIN_SCOPE: UserScope = new Set([...ADMIN_SCOPE]);

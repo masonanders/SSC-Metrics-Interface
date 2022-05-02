@@ -1,4 +1,4 @@
-import { UserScope } from '../userScope';
+import { UserScope } from '../constants';
 
 export default function isMemberWithinScope(
   member: DiscordMember,
