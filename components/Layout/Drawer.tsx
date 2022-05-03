@@ -39,7 +39,7 @@ export default function Drawer() {
         gridTemplateRows="min-content auto min-content min-content"
       >
         <Typography fontSize={16} fontWeight={600}>
-          {session.data?.member?.nick}
+          {session.data?.member?.user.username}
         </Typography>
         <List>
           <ListItem>Supply Orders</ListItem>

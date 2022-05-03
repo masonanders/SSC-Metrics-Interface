@@ -15,7 +15,7 @@ export default function AcceptedByCell<R extends Request>({
 }): ReactElement {
   const session = useSession();
   const isAcceptedByCurrentUser =
-    request.acceptedBy === session.data.member.nick;
+    request.acceptedBy === session.data.member.user.username;
   const { isRequestUpdating, startUpdatingRequests, stopUpdatingRequests } =
     useContext(RequestUpdateBufferContext);
 

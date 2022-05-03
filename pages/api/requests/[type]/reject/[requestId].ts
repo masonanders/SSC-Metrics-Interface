@@ -32,7 +32,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         res.status(404).json({ message: 'Order not found' });
         res.end();
         return;
-      } else if (row.acceptedBy !== session.member.nick) {
+      } else if (row.acceptedBy !== session.member.user.username) {
         res.status(423).json({ message: 'Order is not accepted by user' });
         res.end();
         return;

@@ -27,7 +27,7 @@ export default function AcceptedAndOpenTables<R extends Request>({
         openRows: { open: R[]; accepted: R[]; complete: R[] };
       }>(
         (acc, row) => {
-          if (session.data.member.nick === row.acceptedBy) {
+          if (session.data.member.user.username === row.acceptedBy) {
             acc.acceptedRows[row.completed ? 'complete' : 'incomplete'].push(
               row
             );

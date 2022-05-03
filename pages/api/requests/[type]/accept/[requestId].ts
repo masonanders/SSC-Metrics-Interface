@@ -40,7 +40,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
       await updateRequestData(type, [
         {
-          values: [[session.member.nick]],
+          values: [[session.member.user.username]],
           from: {
             column: requestTypeSheetAcceptedByColumnMap[type],
             row: row.rowNum,
