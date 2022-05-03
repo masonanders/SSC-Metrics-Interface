@@ -9,9 +9,15 @@ export enum Sheet {
   MANUFACTURING_REQUESTS = 'Manufacturing Requests',
   REFINING_REQUESTS = 'Refining Requests',
   DELIVERY_REQUESTS = 'Delivery Requests',
+  FEEDBACK = 'Web app feedback',
 }
 
 export enum SheetBool {
   TRUE = 'TRUE',
   FALSE = 'FALSE',
+}
+
+export enum SheetDimension {
+  ROWS = 'ROWS',
+  COLUMNS = 'COLUMNS',
 }
