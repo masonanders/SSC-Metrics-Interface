@@ -39,7 +39,7 @@ export function QuantityAndCostTableCell<
               </Typography>
             )}
           {'requiredSalvage' in row && !!row.requiredSalvage && (
-            <Typography>Salave: {row.requiredSalvage}</Typography>
+            <Typography>Salvage: {row.requiredSalvage}</Typography>
           )}
           {'requiredComponents' in row && !!row.requiredComponents && (
             <Typography>Components: {row.requiredComponents}</Typography>
