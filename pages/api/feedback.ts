@@ -30,7 +30,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
           ],
         ],
       });
-      res.status(200).json({ succss: true });
+      res.status(200).json({ success: true });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error });
