@@ -13,6 +13,7 @@ export function QuantityAndCostTableCell<
   }
   return (
     <Tooltip
+      arrow
       title={
         <Box
           display="grid"
