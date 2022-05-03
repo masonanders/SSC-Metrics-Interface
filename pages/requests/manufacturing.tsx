@@ -10,6 +10,11 @@ import AcceptedByCell from '../../components/AcceptedByCell';
 import CompletedCell from '../../components/CompletedCell';
 import Loading from '../../components/Loading';
 import usePollRequests from '../../util/client/usePollRequests';
+import {
+  LocationTableCell,
+  PriorityTableCell,
+  QuantityAndCostTableCell,
+} from '../../components/customTableCells';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context, authOptions);
@@ -45,10 +50,16 @@ function RowConstructor({
   return (
     <TableRow>
       <TableCell>{head ? 'Item name' : row.item}</TableCell>
-      <TableCell align="center">{head ? '#' : row.quantity}</TableCell>
+      <QuantityAndCostTableCell head={head} row={row} />
       <TableCell>{head ? 'Category' : row.category}</TableCell>
-      <TableCell>{head ? 'Refinery zone' : row.deliveryLocation}</TableCell>
-      <TableCell>{head ? 'Priority' : row.priority}</TableCell>
+      <LocationTableCell
+        head={head}
+        title="Delivery location"
+        location={row.deliveryLocation}
+        region={row.deliveryRegion}
+        zone={row.deliveryZone}
+      />
+      <PriorityTableCell head={head} row={row} />
       <TableCell align="center">
         <AcceptedByCell
           requestType={RequestType.MANUFACTURING}
