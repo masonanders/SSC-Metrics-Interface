@@ -1,7 +1,10 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import { LOGIN_SCOPE } from '../../../util/userScope';
-import { HTTPNotFoundError } from '../../../util/customErrors';
+import {
+  HTTPNotFoundError,
+  HTTPTooManyRequestsError,
+} from '../../../util/customErrors';
 import fetchDiscordMember from '../../../util/fetchDiscordMember';
 import isExpired from '../../../util/isExpired';
 import isMemberWithinScope from '../../../util/server/isMemberWithinScope';
@@ -27,7 +30,7 @@ export const authOptions: NextAuthOptions = {
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           member: user.member,
-          memberExp: Math.floor(Date.now() / 1000) + 60 * 5,
+          memberExp: getNewDiscordMemberExpiryTime(),
         };
       }
       if (
@@ -43,10 +46,13 @@ export const authOptions: NextAuthOptions = {
           return {
             ...token,
             member,
-            memberExp: Math.floor(Date.now() / 1000) + 60 * 5,
+            memberExp: getNewDiscordMemberExpiryTime(),
           };
         } catch (error) {
           console.log('jwt:catch', error);
+          if (error instanceof HTTPTooManyRequestsError) {
+            return { ...token, memberExp: getNewDiscordMemberExpiryTime() };
+          }
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { member: _member, memberExp: _memberExp, ...newToken } = token;
           return { ...newToken, error };
@@ -87,5 +93,9 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
+
+function getNewDiscordMemberExpiryTime() {
+  return Math.floor(Date.now() / 1000) + 60 * 10;
+}
 
 export default NextAuth(authOptions);
