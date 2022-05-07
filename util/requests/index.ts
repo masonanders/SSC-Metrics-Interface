@@ -234,7 +234,7 @@ export async function getRequestData(type: RequestType, toColumn: string) {
   return await fetchSheetData({
     sheet: typeToSheetMap[type],
     from: { column: 'A', row: 1 },
-    to: { column: toColumn, row: 100 },
+    to: { column: toColumn, row: 200 },
   });
 }
 
