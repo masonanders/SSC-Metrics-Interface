@@ -8,7 +8,13 @@ import {
   SheetBool,
   ValueInputOption,
 } from '../server/googleSheets/types';
-import { getItemCategory, getItemRawResource, ItemName } from './items';
+import { getItemCraftTime, getItemRawResource } from './items';
+import {
+  Category,
+  ItemName,
+  MaterialItemName,
+  RawResource,
+} from './items.types';
 import { getRequiredResources } from './refining';
 import {
   DeliveryRequest,
@@ -17,6 +23,10 @@ import {
   Priority,
   RequestType,
   Request,
+  RefiningRequestRow,
+  RequestRow,
+  DeliveryRequestRow,
+  ManufacturingRequestRow,
 } from './types';
 
 // Sheet address maps
@@ -69,9 +79,9 @@ export function processRefiningRequestsRow(
   ] = row;
   return {
     rowNum,
-    item,
+    item: item as MaterialItemName,
     quantity: parseInt(quantity),
-    category,
+    category: category as RawResource,
     refineryZone,
     region,
     coordinates,
@@ -86,9 +96,9 @@ export function processRefiningRequestsRow(
     requiredCopper: parseInt(requiredCopper),
     craftTime,
     confirmed: confirmed && confirmed === SheetBool.TRUE,
-    timeRequested: new Date(timeRequested).getTime(),
-    timeAccepted: new Date(timeAccepted).getTime(),
-    timeCompleted: new Date(timeCompleted).getTime(),
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
     id: uniqueId,
   };
 }
@@ -121,9 +131,9 @@ export function processManufacturingRequestsRow(
   ] = row;
   return {
     rowNum,
-    item,
+    item: item as ItemName,
     quantity: parseInt(quantity),
-    category,
+    category: category as Category,
     requester,
     deliveryLocation,
     deliveryRegion,
@@ -137,9 +147,9 @@ export function processManufacturingRequestsRow(
     requiredHeavyExplosiveMaterials: parseInt(requiredHeavyExplosiveMaterials),
     craftTime,
     confirmed: confirmed && confirmed === SheetBool.TRUE,
-    timeRequested: new Date(timeRequested).getTime(),
-    timeAccepted: new Date(timeAccepted).getTime(),
-    timeCompleted: new Date(timeCompleted).getTime(),
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
     id: uniqueId,
   };
 }
@@ -170,9 +180,9 @@ export function processDelivereyRequestsRow(
   ] = row;
   return {
     rowNum,
-    item,
+    item: item as ItemName,
     quantity: parseInt(quantity),
-    category,
+    category: category as Category,
     requester,
     pickupLocation,
     pickupRegion,
@@ -184,9 +194,9 @@ export function processDelivereyRequestsRow(
     acceptedBy,
     completed: completed && completed === SheetBool.TRUE,
     confirmed: confirmed && confirmed === SheetBool.TRUE,
-    timeRequested: new Date(timeRequested).getTime(),
-    timeAccepted: new Date(timeAccepted).getTime(),
-    timeCompleted: new Date(timeCompleted).getTime(),
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
     id: uniqueId,
   };
 }
@@ -205,16 +215,17 @@ function getProcessRequestRowHelper(type: RequestType) {
 // Row constructor helpers
 function constructRefiningRequestRow(
   request: Partial<RefiningRequest>
-): (string | number | boolean)[] {
+): RefiningRequestRow {
   const {
     item,
     quantity,
-    category = getItemRawResource(item as ItemName),
+    category = getItemRawResource(item),
     refineryZone,
     region,
     coordinates,
     acceptedBy,
     completed,
+    craftTime = getItemCraftTime(item),
     confirmed,
     timeRequested = new Date().toUTCString(),
     timeAccepted,
@@ -230,7 +241,6 @@ function constructRefiningRequestRow(
     requiredAluminium,
     requiredIron,
     requiredCopper,
-    craftTime,
   } = getRequiredResources(item, quantity);
 
   return [
@@ -249,7 +259,7 @@ function constructRefiningRequestRow(
     requiredAluminium,
     requiredIron,
     requiredCopper,
-    craftTime?.toString(), // TODO Format to hour/min/sec
+    craftTime,
     confirmed,
     timeRequested,
     timeAccepted,
@@ -260,7 +270,7 @@ function constructRefiningRequestRow(
 
 function constructManufacturingRequestRow(
   request: Partial<ManufacturingRequest>
-): (string | number | boolean)[] {
+): ManufacturingRequestRow {
   const {
     item,
     quantity,
@@ -309,7 +319,7 @@ function constructManufacturingRequestRow(
 
 function constructDistributionRequestRow(
   request: Partial<DeliveryRequest>
-): (string | number | boolean)[] {
+): DeliveryRequestRow {
   const {
     item,
     quantity,
@@ -352,17 +362,21 @@ function constructDistributionRequestRow(
   ];
 }
 
-export function constructRequestRow(
-  type: RequestType,
+export function constructRequestRow<R extends RequestType>(
+  type: R,
   request: Partial<Request>
-): (string | number | boolean)[] {
+): RequestRow | [] {
   switch (type) {
     case RequestType.REFINING:
-      return constructRefiningRequestRow(request);
+      return constructRefiningRequestRow(request as Partial<RefiningRequest>);
     case RequestType.MANUFACTURING:
-      return constructManufacturingRequestRow(request);
+      return constructManufacturingRequestRow(
+        request as Partial<ManufacturingRequest>
+      );
     case RequestType.DISTRIBUTING:
-      return constructDistributionRequestRow(request);
+      return constructDistributionRequestRow(
+        request as Partial<DeliveryRequest>
+      );
 
     default:
       return [];

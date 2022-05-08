@@ -1,11 +1,11 @@
 import { ItemInfo, ITEM_INFO, RequiredResources } from './items';
-import { Item } from './types';
+import { ItemName } from './items.types';
 
 export function getRequiredResources(
-  item: Item,
+  item: ItemName,
   quantity = 0
-): RequiredResources & { craftTime: number } {
-  const { requiredResources, craftTime }: ItemInfo = ITEM_INFO[item] ?? {};
+): RequiredResources {
+  const { requiredResources }: ItemInfo = ITEM_INFO[item] ?? ({} as ItemInfo);
 
   return {
     ...Object.fromEntries(
@@ -13,6 +13,5 @@ export function getRequiredResources(
         ([key, cost]: [string, number]) => [key, cost * quantity]
       )
     ),
-    craftTime: craftTime * quantity,
   };
 }

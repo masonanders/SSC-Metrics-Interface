@@ -1,67 +1,4 @@
-export type MaterialItemName =
-  | 'Basic Materials Crate'
-  | 'Explosive Materials Crate'
-  | 'Refined Materials Crate'
-  | 'Heavy Explosive Materials Crate'
-  | 'Diesel Crate'
-  | 'Petrol Crate'
-  | 'Aluminum Alloy Crate'
-  | 'Iron Alloy Crate'
-  | 'Copper Alloy Crate'
-  | 'Concrete Materials';
-
-export type ItemName = MaterialItemName;
-
-export type RawResource =
-  | 'Salvage'
-  | 'Componenets'
-  | 'Sulfur'
-  | 'Crude Oil'
-  | 'Aluminum'
-  | 'Iron'
-  | 'Copper';
-
-export type Category =
-  | 'Mats'
-  | 'Small Arms'
-  | 'Heavy Arms'
-  | 'Heavy Ammo'
-  | 'Utility'
-  | 'Medical'
-  | 'Resource'
-  | 'Uniforms'
-  | 'Ambulance'
-  | 'Armored Car'
-  | 'Assault Tank'
-  | 'Barge'
-  | 'Battle Tank'
-  | 'Construction'
-  | 'Crane'
-  | 'Cruiser Tank'
-  | 'Destroyer Tank'
-  | 'Field AT Gun'
-  | 'Field Cannon'
-  | 'Field MG'
-  | 'Field Mortar'
-  | 'Flatbed Truck'
-  | 'Freighter'
-  | 'Fuel Tanker'
-  | 'Gunboat'
-  | 'Half-Track'
-  | 'Harvester'
-  | 'Heavy Field Cannon'
-  | 'Landing APC'
-  | 'Light Tank'
-  | 'Light Utility Vehicle'
-  | 'Motorcycle'
-  | 'Scout Tank'
-  | 'Transport Bus'
-  | 'Truck'
-  | 'Landing Ship'
-  | 'Stationary Cannon'
-  | 'Stationary MG'
-  | 'Stationary AT'
-  | 'Logistics';
+import { Category, CraftTime, ItemName, RawResource } from './items.types';
 
 export type RequiredResources = Partial<{
   // Refining
@@ -180,7 +117,7 @@ export const ITEM_INFO: Record<ItemName, ItemInfo> = {
       requiredComponents: 10,
     },
   },
-};
+} as const;
 
 export function getItemCategory(item: ItemName): Category | undefined {
   return ITEM_INFO[item]?.category;
@@ -188,4 +125,8 @@ export function getItemCategory(item: ItemName): Category | undefined {
 
 export function getItemRawResource(item: ItemName): RawResource | undefined {
   return ITEM_INFO[item]?.rawResource;
+}
+
+export function getItemCraftTime(item: ItemName): CraftTime | undefined {
+  return ITEM_INFO[item]?.craftTime?.toString();
 }
