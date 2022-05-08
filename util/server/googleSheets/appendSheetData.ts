@@ -10,16 +10,18 @@ const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
 export default async function appendSheetData({
   sheet,
-  from = { column: 'A', row: 1 },
-  to = from,
   dimension = SheetDimension.ROWS,
-  values,
+  valueInputOption = ValueInputOption.USER_ENTERED,
+  data: { from = { column: 'A', row: 1 }, to = from, values },
 }: {
   sheet: Sheet;
-  from?: RangeCoordinate;
-  to?: RangeCoordinate;
   dimension?: SheetDimension;
-  values: string[][];
+  valueInputOption?: ValueInputOption.USER_ENTERED;
+  data: {
+    from?: RangeCoordinate;
+    to?: RangeCoordinate;
+    values: (string | number | boolean | undefined | null)[][];
+  };
 }) {
   try {
     const sheets = getGoogleSheetsApiInstance();
@@ -31,7 +33,7 @@ export default async function appendSheetData({
         majorDimension: dimension,
         values,
       },
-      valueInputOption: ValueInputOption.USER_ENTERED,
+      valueInputOption,
     });
 
     return data;

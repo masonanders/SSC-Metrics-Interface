@@ -1,5 +1,6 @@
 import { sheets_v4 } from 'googleapis';
 import getUniqueId from '../getUniqueId';
+import appendSheetData from '../server/googleSheets/appendSheetData';
 import batchUpdateSheetData from '../server/googleSheets/batchUpdateSheetData';
 import fetchSheetData from '../server/googleSheets/fetchSheetData';
 import {
@@ -199,6 +200,167 @@ function getProcessRequestRowHelper(type: RequestType) {
   }
 }
 
+// Row constructor helpers
+function constructRefiningRequestRow(
+  request: Partial<RefiningRequest>
+): (string | number | boolean)[] {
+  const {
+    item,
+    quantity,
+    refineryZone,
+    region,
+    coordinates,
+    acceptedBy,
+    completed,
+    requiredSalvage,
+    requiredComponents,
+    requiredSulfur,
+    requiredCrudeOil,
+    requiredAluminium,
+    requiredIron,
+    requiredCopper,
+    craftTime,
+    confirmed,
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
+    id,
+  } = request;
+  return [
+    item,
+    quantity,
+    refineryZone,
+    region,
+    coordinates,
+    acceptedBy,
+    completed,
+    requiredSalvage,
+    requiredComponents,
+    requiredSulfur,
+    requiredCrudeOil,
+    requiredAluminium,
+    requiredIron,
+    requiredCopper,
+    craftTime,
+    confirmed,
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
+    id,
+  ];
+}
+
+function constructManufacturingRequestRow(
+  request: Partial<ManufacturingRequest>
+): (string | number | boolean)[] {
+  const {
+    item,
+    quantity,
+    category,
+    requester,
+    deliveryLocation,
+    deliveryRegion,
+    deliveryZone,
+    priority,
+    acceptedBy,
+    completed,
+    requiredBuildingMaterials,
+    requiredExplosiveMaterials,
+    requiredRefinedMaterials,
+    requiredHeavyExplosiveMaterials,
+    craftTime,
+    confirmed,
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
+    id,
+  } = request;
+  return [
+    item,
+    quantity,
+    category,
+    requester,
+    deliveryLocation,
+    deliveryRegion,
+    deliveryZone,
+    priority,
+    acceptedBy,
+    completed,
+    requiredBuildingMaterials,
+    requiredExplosiveMaterials,
+    requiredRefinedMaterials,
+    requiredHeavyExplosiveMaterials,
+    craftTime,
+    confirmed,
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
+    id,
+  ];
+}
+
+function constructDistributionRequestRow(
+  request: Partial<DeliveryRequest>
+): (string | number | boolean)[] {
+  const {
+    item,
+    quantity,
+    category,
+    requester,
+    pickupLocation,
+    pickupRegion,
+    pickupZone,
+    deliveryLocation,
+    deliveryRegion,
+    deliveryZone,
+    priority,
+    acceptedBy,
+    completed,
+    confirmed,
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
+    id,
+  } = request;
+  return [
+    item,
+    quantity,
+    category,
+    requester,
+    pickupLocation,
+    pickupRegion,
+    pickupZone,
+    deliveryLocation,
+    deliveryRegion,
+    deliveryZone,
+    priority,
+    acceptedBy,
+    completed,
+    confirmed,
+    timeRequested,
+    timeAccepted,
+    timeCompleted,
+    id,
+  ];
+}
+
+export function constructRequestRow(
+  type: RequestType,
+  request: Partial<Request>
+): (string | number | boolean)[] {
+  switch (type) {
+    case RequestType.REFINING:
+      return constructRefiningRequestRow(request);
+    case RequestType.MANUFACTURING:
+      return constructManufacturingRequestRow(request);
+    case RequestType.DISTRIBUTING:
+      return constructDistributionRequestRow(request);
+
+    default:
+      return [];
+  }
+}
+
 export function processRows(
   data: sheets_v4.Schema$ValueRange,
   type: RequestType
@@ -247,5 +409,15 @@ export async function updateRequestData(
     sheet: typeToSheetMap[type],
     data,
     valueInputOption: valueInput,
+  });
+}
+
+export async function addRequestData(
+  type: RequestType,
+  data: Parameters<typeof appendSheetData>[0]['data']
+) {
+  return await appendSheetData({
+    sheet: typeToSheetMap[type],
+    data,
   });
 }
