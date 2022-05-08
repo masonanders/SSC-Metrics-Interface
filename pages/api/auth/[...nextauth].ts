@@ -8,7 +8,7 @@ import {
 import fetchDiscordMember from '../../../util/fetchDiscordMember';
 import isExpired from '../../../util/isExpired';
 import isMemberWithinScope from '../../../util/server/isMemberWithinScope';
-import getMemberUserScopeLabel from '../../../util/server/getMemberUserScopeLabel';
+import getMemberUserScopeLabels from '../../../util/server/getMemberUserScopeLabels';
 
 const secret = process.env.SECRET;
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
         return { ...session, forceSignout: true };
       }
       session.member = token.member;
-      session.scope = getMemberUserScopeLabel(token.member);
+      session.scope = getMemberUserScopeLabels(token.member);
       return session;
     },
     async signIn({ user, account }) {
