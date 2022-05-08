@@ -5,7 +5,6 @@ import {
   LOGIN_SCOPE,
   PRIVATE_SCOPE,
   PUBLIC_SCOPE,
-  UserScopeLabel,
 } from './userScope';
 
 export default function getMemberUserScopeLabels(
