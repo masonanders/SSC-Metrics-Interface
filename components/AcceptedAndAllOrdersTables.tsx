@@ -1,9 +1,13 @@
-import { Checkbox, Typography } from '@mui/material';
+import { Button, Checkbox, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useSession } from 'next-auth/react';
 import { FunctionComponent, useMemo, useState } from 'react';
-import { Request } from '../util/requests/types';
+import { RefiningRequest, Request } from '../util/requests/types';
 import Table from './Table';
+import AddIcon from '@mui/icons-material/Add';
+import useUserScope from '../util/client/useUserScope';
+import { UserScopeLabel } from '../util/server/userScope.types';
+import post from '../util/client/post';
 
 export default function AcceptedAndOpenTables<R extends Request>({
   rows,
@@ -13,6 +17,7 @@ export default function AcceptedAndOpenTables<R extends Request>({
   RowConstructor: FunctionComponent<{ row: R; head?: boolean }>;
 }) {
   const session = useSession();
+  const { hasUserScopeAccess } = useUserScope();
   const rowHead = rows[0];
   const [showAcceptedCompletedOrders, toggleShowAcceptedCompletedOrders] =
     useState<boolean>(false);
@@ -58,9 +63,14 @@ export default function AcceptedAndOpenTables<R extends Request>({
     >
       <Box display="flex" flexDirection="column" overflow="hidden">
         <Box display="flex" justifyContent="space-between">
-          <Typography fontWeight="bold" variant="h6">
-            Accepted by you
-          </Typography>
+          <Box display="flex" alignItems="center" gap={4}>
+            <Typography fontWeight="bold" variant="h6">
+              Accepted by you
+            </Typography>
+            <Button size="small" variant="outlined" color="primary">
+              <AddIcon fontSize="small" sx={{ mr: 1 }} /> Record input
+            </Button>
+          </Box>
           <Box display="flex" alignItems="center">
             <Checkbox
               disabled={!acceptedRows.complete.length}
@@ -96,9 +106,31 @@ export default function AcceptedAndOpenTables<R extends Request>({
           display="grid"
           gridTemplateColumns="[title-start] auto [title-end] auto [accepted-checkbox-start] min-content [accepted-checkbox-end] 24px [completed-checkbox-start] min-content [completed-checkbox-end]"
         >
-          <Typography fontWeight="bold" variant="h6" gridColumn="title">
-            Open orders
-          </Typography>
+          <Box display="flex" alignItems="center" gap={4}>
+            <Typography fontWeight="bold" variant="h6" gridColumn="title">
+              Open orders
+            </Typography>
+            {hasUserScopeAccess(UserScopeLabel.ADMIN) && (
+              <Button
+                onClick={() => {
+                  post(`/api/requests/refining/add`, {
+                    requests: [
+                      {
+                        item: 'Basic Materials Crate',
+                        quantity: 4,
+                        refineryZone: 'Nevish Line',
+                      } as RefiningRequest,
+                    ],
+                  });
+                }}
+                size="small"
+                variant="outlined"
+                color="primary"
+              >
+                <AddIcon fontSize="small" sx={{ mr: 1 }} /> Create order
+              </Button>
+            )}
+          </Box>
           <Box
             display="flex"
             alignItems="center"
