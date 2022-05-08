@@ -29,6 +29,15 @@ export const FWGMemberRole = {
 } as const;
 
 // User Scope
+
+export enum UserScopeLabel {
+  DIRECTOR = 'DIRECTOR',
+  ADMIN = 'ADMIN',
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC',
+  LOGIN = 'LOGIN',
+}
+
 export type UserScope = ReadonlySet<FWGMemberRoleId>;
 
 export const DIRECTOR_SCOPE: UserScope = new Set([

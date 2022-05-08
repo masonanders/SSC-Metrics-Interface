@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
-import { LOGIN_SCOPE } from '../../../util/userScope';
+import { LOGIN_SCOPE } from '../../../util/server/userScope';
 import {
   HTTPNotFoundError,
   HTTPTooManyRequestsError,
@@ -8,6 +8,7 @@ import {
 import fetchDiscordMember from '../../../util/fetchDiscordMember';
 import isExpired from '../../../util/isExpired';
 import isMemberWithinScope from '../../../util/server/isMemberWithinScope';
+import getMemberUserScopeLabel from '../../../util/server/getMemberUserScopeLabel';
 
 const secret = process.env.SECRET;
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -70,6 +71,7 @@ export const authOptions: NextAuthOptions = {
         return { ...session, forceSignout: true };
       }
       session.member = token.member;
+      session.scope = getMemberUserScopeLabel(token.member);
       return session;
     },
     async signIn({ user, account }) {

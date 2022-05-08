@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import { PRIVATE_SCOPE } from '../../../../util/userScope';
+import { PRIVATE_SCOPE } from '../../../../util/server/userScope';
 import isMemberWithinScope from '../../../../util/server/isMemberWithinScope';
 import {
   getRequestData,
