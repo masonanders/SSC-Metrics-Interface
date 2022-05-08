@@ -1,5 +1,6 @@
 // FWG Discord Server Member Roles
-type FWGMemberRoleId = string;
+
+import { FWGMemberRoleId, UserScope } from './userScope.types';
 
 export const FWGMemberRole = {
   ADJUTANT: process.env.FWG_ROLE_ID_ADJUTANT as FWGMemberRoleId,
@@ -29,8 +30,6 @@ export const FWGMemberRole = {
 } as const;
 
 // User Scope
-
-export type UserScope = ReadonlySet<FWGMemberRoleId>;
 
 export const DIRECTOR_SCOPE: UserScope = new Set([
   FWGMemberRole.ADJUTANT,

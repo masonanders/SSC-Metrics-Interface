@@ -60,12 +60,4 @@ export declare global {
     permissions?: string;
     communication_disabled_until?: ISO8601Timestamp;
   }
-
-  enum UserScopeLabel {
-    DIRECTOR = 'DIRECTOR',
-    ADMIN = 'ADMIN',
-    PRIVATE = 'PRIVATE',
-    PUBLIC = 'PUBLIC',
-    LOGIN = 'LOGIN',
-  }
 }

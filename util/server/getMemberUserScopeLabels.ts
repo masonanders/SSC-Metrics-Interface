@@ -6,6 +6,7 @@ import {
   PRIVATE_SCOPE,
   PUBLIC_SCOPE,
 } from './userScope';
+import { UserScopeLabel } from './userScope.types';
 
 export default function getMemberUserScopeLabels(
   member: DiscordMember

@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { useCallback } from 'react';
+import { UserScopeLabel } from '../server/userScope.types';
 
 export default function useUserScope() {
   const session = useSession();
