@@ -19,7 +19,7 @@ type Body = {
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession({ req, res }, authOptions);
   const { type } = req.query;
-  const body: Body = req.body;
+  const body: Body = JSON.parse(req.body);
 
   if (
     isSessionValid(session) &&

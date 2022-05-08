@@ -8,6 +8,8 @@ import {
   SheetBool,
   ValueInputOption,
 } from '../server/googleSheets/types';
+import { getItemCategory, getItemRawResource, ItemName } from './items';
+import { getRequiredResources } from './refining';
 import {
   DeliveryRequest,
   RefiningRequest,
@@ -207,11 +209,20 @@ function constructRefiningRequestRow(
   const {
     item,
     quantity,
+    category = getItemRawResource(item as ItemName),
     refineryZone,
     region,
     coordinates,
     acceptedBy,
     completed,
+    confirmed,
+    timeRequested = new Date().toUTCString(),
+    timeAccepted,
+    timeCompleted,
+    id = getUniqueId(),
+  } = request;
+
+  const {
     requiredSalvage,
     requiredComponents,
     requiredSulfur,
@@ -220,15 +231,12 @@ function constructRefiningRequestRow(
     requiredIron,
     requiredCopper,
     craftTime,
-    confirmed,
-    timeRequested,
-    timeAccepted,
-    timeCompleted,
-    id,
-  } = request;
+  } = getRequiredResources(item, quantity);
+
   return [
     item,
     quantity,
+    category,
     refineryZone,
     region,
     coordinates,
@@ -241,7 +249,7 @@ function constructRefiningRequestRow(
     requiredAluminium,
     requiredIron,
     requiredCopper,
-    craftTime,
+    craftTime?.toString(), // TODO Format to hour/min/sec
     confirmed,
     timeRequested,
     timeAccepted,

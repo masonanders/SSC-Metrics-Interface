@@ -16,7 +16,7 @@ export default async function appendSheetData({
 }: {
   sheet: Sheet;
   dimension?: SheetDimension;
-  valueInputOption?: ValueInputOption.USER_ENTERED;
+  valueInputOption?: ValueInputOption;
   data: {
     from?: RangeCoordinate;
     to?: RangeCoordinate;
