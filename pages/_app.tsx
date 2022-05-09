@@ -2,7 +2,7 @@ import { ThemeProvider } from '@mui/material';
 import { Session } from 'next-auth';
 import { SessionProvider, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import '../styles/globals.css';
+import DialogProvider from '../util/client/DialogProvider';
 import { RequestUpdateBufferContextProvider } from '../util/client/requestUpdateBuffer';
 import { lightTheme } from '../util/client/theme';
 
@@ -21,7 +21,9 @@ function Application({ Component, pageProps: { session, ...pageProps } }) {
     <SessionProvider session={session}>
       <ThemeProvider theme={lightTheme}>
         <RequestUpdateBufferContextProvider>
-          <Component {...pageProps} />
+          <DialogProvider>
+            <Component {...pageProps} />
+          </DialogProvider>
         </RequestUpdateBufferContextProvider>
       </ThemeProvider>
     </SessionProvider>
