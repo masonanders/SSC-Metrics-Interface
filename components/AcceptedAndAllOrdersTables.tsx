@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import useUserScope from '../util/client/useUserScope';
 import { UserScopeLabel } from '../util/server/userScope.types';
 import post from '../util/client/post';
+import useDialogManager from '../util/client/useDialogManager';
 
 export default function AcceptedAndOpenTables<R extends Request>({
   rows,
@@ -18,6 +19,7 @@ export default function AcceptedAndOpenTables<R extends Request>({
 }) {
   const session = useSession();
   const { hasUserScopeAccess } = useUserScope();
+  const { openCreateOrderDialog } = useDialogManager();
   const rowHead = rows[0];
   const [showAcceptedCompletedOrders, toggleShowAcceptedCompletedOrders] =
     useState<boolean>(false);
@@ -112,17 +114,7 @@ export default function AcceptedAndOpenTables<R extends Request>({
             </Typography>
             {hasUserScopeAccess(UserScopeLabel.ADMIN) && (
               <Button
-                onClick={() => {
-                  post(`/api/requests/refining/add`, {
-                    requests: [
-                      {
-                        item: 'Basic Materials Crate',
-                        quantity: 4,
-                        refineryZone: 'Nevish Line',
-                      } as RefiningRequest,
-                    ],
-                  });
-                }}
+                onClick={openCreateOrderDialog}
                 size="small"
                 variant="outlined"
                 color="primary"

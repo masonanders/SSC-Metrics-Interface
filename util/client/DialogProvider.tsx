@@ -1,4 +1,5 @@
 import { createContext, useCallback, useState } from 'react';
+import CreateOrderDialog from '../../components/CreateOrderDialog';
 
 export const DialogContext = createContext<{
   openCreateOrderDialog: () => void;
@@ -19,6 +20,10 @@ export default function DialogProvider({ children }) {
 
   return (
     <DialogContext.Provider value={{ openCreateOrderDialog }}>
+      <CreateOrderDialog
+        onClose={() => setOpenDialog(null)}
+        open={openDialog === DialogKeys.CREATE_ORDER}
+      />
       {children}
     </DialogContext.Provider>
   );
