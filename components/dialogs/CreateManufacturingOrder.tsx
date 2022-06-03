@@ -14,7 +14,7 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import { ITEM_INFO } from '../../util/requests/items';
+import { MANUFACTURING_ITEM_INFO } from '../../util/requests/items';
 import AddIcon from '@mui/icons-material/Add';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ManufacturingRequest } from '../../util/requests/types';
@@ -195,10 +195,12 @@ function ItemEntry<I extends ItemParams>({
         renderInput={(params) => (
           <TextField error={!item.itemName} label="Item name" {...params} />
         )}
-        options={Object.keys(ITEM_INFO).map((itemName: ItemName) => ({
-          label: itemName,
-        }))}
-        value={item.itemName}
+        options={Object.keys(MANUFACTURING_ITEM_INFO).map(
+          (itemName: ItemName) => ({
+            label: itemName,
+          })
+        )}
+        value={item.itemName ?? ''}
         isOptionEqualToValue={(option, value) =>
           option.label === (value as unknown as string)
         }
@@ -366,7 +368,7 @@ function LocationEntry({
         )}
         onInputChange={handleSetLocation}
         onChange={handleSetLocation}
-        value={location}
+        value={location ?? ''}
         options={locationOptions}
         isOptionEqualToValue={(option, value) => option.label === value}
         sx={{ gridColumn: '1 / 7' }}

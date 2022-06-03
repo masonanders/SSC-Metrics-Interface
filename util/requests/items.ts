@@ -1210,6 +1210,17 @@ export const ITEM_INFO: Record<ItemName, ItemInfo> = {
   ...VEHICLES_ITEM_INFO,
 } as const;
 
+export const MANUFACTURING_ITEM_INFO = {
+  ...SMALL_ARM_ITEM_INFO,
+  ...HEAVY_ARM_ITEM_INFO,
+  ...HEAVY_AMMO_ITEM_INFO,
+  ...UTILITY_ITEM_INFO,
+  ...MEDICAL_ITEM_INFO,
+  ...RESOURCE_ITEM_INFO,
+  ...UNIFORM_ITEM_INFO,
+  ...VEHICLES_ITEM_INFO,
+} as const;
+
 export function getItemCategory(item: ItemName): Category | undefined {
   return ITEM_INFO[item]?.category;
 }
