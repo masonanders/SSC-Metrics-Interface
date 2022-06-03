@@ -8,8 +8,10 @@ export default function usePolling<RowType>(
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch(requestUrl);
-      setData(await response.json());
+      if (document.visibilityState === 'visible') {
+        const response = await fetch(requestUrl);
+        setData(await response.json());
+      }
     }
     getData();
 
