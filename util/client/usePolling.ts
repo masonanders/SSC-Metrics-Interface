@@ -8,17 +8,15 @@ export default function usePolling<RowType>(
 
   useEffect(() => {
     async function getData() {
-      if (document.visibilityState === 'visible') {
-        const response = await fetch(requestUrl);
-        setData(await response.json());
-      }
+      const response = await fetch(requestUrl);
+      setData(await response.json());
     }
     getData();
 
     let pollInstance = poll();
     function poll() {
       return window.setTimeout(async () => {
-        await getData();
+        if (document.visibilityState === 'visible') await getData();
         pollInstance = poll();
       }, pollingInterval);
     }
