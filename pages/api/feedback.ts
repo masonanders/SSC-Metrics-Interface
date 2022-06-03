@@ -21,14 +21,16 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
       await appendSheetData({
         sheet: Sheet.FEEDBACK,
-        values: [
-          [
-            new Date().toUTCString(),
-            session.member.user.username,
-            session.member.nick,
-            message,
+        data: {
+          values: [
+            [
+              new Date().toUTCString(),
+              session.member.user.username,
+              session.member.nick,
+              message,
+            ],
           ],
-        ],
+        },
       });
       res.status(200).json({ success: true });
     } catch (error) {
