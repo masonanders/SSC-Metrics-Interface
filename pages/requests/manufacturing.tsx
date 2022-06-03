@@ -34,7 +34,11 @@ export default function Manufacturing() {
       {!rows.length ? (
         <Loading />
       ) : (
-        <AcceptedAndOpenTables rows={rows} RowConstructor={RowConstructor} />
+        <AcceptedAndOpenTables
+          showCreateOrderButton
+          rows={rows}
+          RowConstructor={RowConstructor}
+        />
       )}
     </Layout>
   );

@@ -2,22 +2,27 @@ import { Button, Checkbox, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useSession } from 'next-auth/react';
 import { FunctionComponent, useMemo, useState } from 'react';
-import { RefiningRequest, Request } from '../util/requests/types';
+import { Request } from '../util/requests/types';
 import Table from './Table';
 import AddIcon from '@mui/icons-material/Add';
 import useUserScope from '../util/client/useUserScope';
 import { UserScopeLabel } from '../util/server/userScope.types';
-import post from '../util/client/post';
+import useDialogManager from '../util/client/useDialogManager';
 
 export default function AcceptedAndOpenTables<R extends Request>({
   rows,
   RowConstructor,
+  showRecordInputButton,
+  showCreateOrderButton,
 }: {
   rows: R[];
   RowConstructor: FunctionComponent<{ row: R; head?: boolean }>;
+  showRecordInputButton?: boolean;
+  showCreateOrderButton?: boolean;
 }) {
   const session = useSession();
   const { hasUserScopeAccess } = useUserScope();
+  const { openCreateOrderDialog } = useDialogManager();
   const rowHead = rows[0];
   const [showAcceptedCompletedOrders, toggleShowAcceptedCompletedOrders] =
     useState<boolean>(false);
@@ -67,9 +72,11 @@ export default function AcceptedAndOpenTables<R extends Request>({
             <Typography fontWeight="bold" variant="h6">
               Accepted by you
             </Typography>
-            <Button size="small" variant="outlined" color="primary">
-              <AddIcon fontSize="small" sx={{ mr: 1 }} /> Record input
-            </Button>
+            {showRecordInputButton && (
+              <Button size="small" variant="outlined" color="primary">
+                <AddIcon fontSize="small" sx={{ mr: 1 }} /> Record input
+              </Button>
+            )}
           </Box>
           <Box display="flex" alignItems="center">
             <Checkbox
@@ -110,19 +117,9 @@ export default function AcceptedAndOpenTables<R extends Request>({
             <Typography fontWeight="bold" variant="h6" gridColumn="title">
               Open orders
             </Typography>
-            {hasUserScopeAccess(UserScopeLabel.ADMIN) && (
+            {showCreateOrderButton && hasUserScopeAccess(UserScopeLabel.ADMIN) && (
               <Button
-                onClick={() => {
-                  post(`/api/requests/refining/add`, {
-                    requests: [
-                      {
-                        item: 'Basic Materials Crate',
-                        quantity: 4,
-                        refineryZone: 'Nevish Line',
-                      } as RefiningRequest,
-                    ],
-                  });
-                }}
+                onClick={openCreateOrderDialog}
                 size="small"
                 variant="outlined"
                 color="primary"
