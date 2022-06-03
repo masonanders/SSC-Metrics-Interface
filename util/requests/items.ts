@@ -1218,6 +1218,31 @@ export function getItemRawResource(item: ItemName): RawResource | undefined {
   return ITEM_INFO[item]?.rawResource;
 }
 
-export function getItemCraftTime(item: ItemName): CraftTime | undefined {
-  return ITEM_INFO[item]?.craftTime?.toString();
+export function getItemCraftTime(
+  item: ItemName,
+  quantity = 0
+): CraftTime | undefined {
+  return formatTime((ITEM_INFO[item]?.craftTime ?? 0) * quantity);
+}
+
+function formatTime(timeInSeconds: number): CraftTime {
+  const day = 60 * 60 * 24;
+  const hour = 60 * 60;
+  const minute = 60;
+
+  const days = Math.floor(timeInSeconds / (60 * 60 * 24));
+  const hours = Math.floor((timeInSeconds - days * day) / (60 * 60));
+  const minutes = Math.floor((timeInSeconds - days * day - hours * hour) / 60);
+  const seconds = Math.floor(
+    timeInSeconds - days * day - hours * hour - minutes * minute
+  );
+
+  return [
+    days || null,
+    days && hours < 10 ? `0${hours}` : hours,
+    minutes < 10 ? `0${minutes}` : minutes,
+    seconds < 10 ? `0${seconds}` : seconds,
+  ]
+    .filter((unit) => unit !== null)
+    .join(':');
 }

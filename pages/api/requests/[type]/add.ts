@@ -29,7 +29,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     try {
       await addRequestData(type, {
         values: body.requests.map((request) =>
-          constructRequestRow(type, request)
+          constructRequestRow(type, request, session.member)
         ),
       });
 

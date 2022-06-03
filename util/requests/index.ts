@@ -8,7 +8,7 @@ import {
   SheetBool,
   ValueInputOption,
 } from '../server/googleSheets/types';
-import { getItemCraftTime, getItemRawResource } from './items';
+import { getItemCategory, getItemCraftTime, getItemRawResource } from './items';
 import {
   Category,
   ItemName,
@@ -269,35 +269,39 @@ function constructRefiningRequestRow(
 }
 
 function constructManufacturingRequestRow(
-  request: Partial<ManufacturingRequest>
+  request: Partial<ManufacturingRequest>,
+  requester: DiscordMember
 ): ManufacturingRequestRow {
   const {
     item,
     quantity,
-    category,
-    requester,
+    category = getItemCategory(item),
     deliveryLocation,
     deliveryRegion,
     deliveryZone,
     priority,
     acceptedBy,
     completed,
-    requiredBuildingMaterials,
-    requiredExplosiveMaterials,
-    requiredRefinedMaterials,
-    requiredHeavyExplosiveMaterials,
-    craftTime,
+    craftTime = getItemCraftTime(item),
     confirmed,
-    timeRequested,
+    timeRequested = new Date().toUTCString(),
     timeAccepted,
     timeCompleted,
-    id,
+    id = getUniqueId(),
   } = request;
+
+  const {
+    requiredBuildingMaterials = 0,
+    requiredExplosiveMaterials = 0,
+    requiredRefinedMaterials = 0,
+    requiredHeavyExplosiveMaterials = 0,
+  } = getRequiredResources(item, quantity);
+
   return [
     item,
     quantity,
     category,
-    requester,
+    requester.nick || requester.user.username,
     deliveryLocation,
     deliveryRegion,
     deliveryZone,
@@ -364,14 +368,16 @@ function constructDistributionRequestRow(
 
 export function constructRequestRow<R extends RequestType>(
   type: R,
-  request: Partial<Request>
+  request: Partial<Request>,
+  requester: DiscordMember
 ): RequestRow | [] {
   switch (type) {
     case RequestType.REFINING:
       return constructRefiningRequestRow(request as Partial<RefiningRequest>);
     case RequestType.MANUFACTURING:
       return constructManufacturingRequestRow(
-        request as Partial<ManufacturingRequest>
+        request as Partial<ManufacturingRequest>,
+        requester
       );
     case RequestType.DISTRIBUTING:
       return constructDistributionRequestRow(
