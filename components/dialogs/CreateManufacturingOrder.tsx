@@ -46,6 +46,7 @@ export default function CreateManufacturingOrderDialog({
     region: string;
     zone: string;
   }>({ name: '', region: '', zone: '' });
+  const [loading, setLoading] = useState(false);
 
   const handleUpdateItem = useCallback(
     (item: ItemParams) => {
@@ -97,9 +98,14 @@ export default function CreateManufacturingOrderDialog({
         })
         .flat();
 
+      setLoading(true);
       await post('/api/requests/manufacturing/add', {
         requests,
       });
+      setLoading(false);
+      setItems([{ id: getUniqueId(), quantity: 4 }]);
+      setLocation({ name: '', region: '', zone: '' });
+      onClose();
     } catch (err) {
       console.log(err);
     }
@@ -149,7 +155,7 @@ export default function CreateManufacturingOrderDialog({
           Cancel
         </Button>
         <Button
-          disabled={!submitEnabled}
+          disabled={!submitEnabled || loading}
           variant="contained"
           onClick={handleSubmit}
         >
@@ -192,7 +198,10 @@ function ItemEntry<I extends ItemParams>({
         options={Object.keys(ITEM_INFO).map((itemName: ItemName) => ({
           label: itemName,
         }))}
-        value={item.itemName ?? ''}
+        value={item.itemName}
+        isOptionEqualToValue={(option, value) =>
+          option.label === (value as unknown as string)
+        }
         sx={{ gridColumn: '1 / 7' }}
       />
       <TextField
@@ -359,6 +368,7 @@ function LocationEntry({
         onChange={handleSetLocation}
         value={location}
         options={locationOptions}
+        isOptionEqualToValue={(option, value) => option.label === value}
         sx={{ gridColumn: '1 / 7' }}
       />
       <Autocomplete
