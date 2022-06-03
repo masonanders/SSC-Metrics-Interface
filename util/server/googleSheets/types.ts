@@ -10,6 +10,7 @@ export enum Sheet {
   REFINING_REQUESTS = 'Refining Requests',
   DELIVERY_REQUESTS = 'Delivery Requests',
   FEEDBACK = 'Web app feedback',
+  LISTS = 'Lists',
 }
 
 export enum SheetBool {
