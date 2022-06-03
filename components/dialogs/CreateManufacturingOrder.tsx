@@ -102,12 +102,19 @@ export default function CreateManufacturingOrderDialog({
       await post('/api/requests/manufacturing/add', {
         requests,
       });
-      setLoading(false);
       setItems([{ id: getUniqueId(), quantity: 4 }]);
       setLocation({ name: '', region: '', zone: '' });
       onClose();
     } catch (err) {
+      window.alert(
+        'Whoops! Something went wrong. Please, try again or report the issue.'
+      );
+      post('/api/feedback', {
+        message: String(err),
+      });
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   }, [items, location]);
 
