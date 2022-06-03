@@ -28,7 +28,9 @@ export default function Table<R extends Request>({
         </TableHead>
         <TableBody sx={{ zIndex: 0 }}>
           {rows.length > 1 ? (
-            rows.slice(1).map((row) => <RowConstructor row={row} />)
+            rows
+              .slice(1)
+              .map((row) => <RowConstructor key={row.id} row={row} />)
           ) : (
             <TableCell colSpan={8}>
               <Typography sx={{ my: 4 }} textAlign="center" variant="h4">
